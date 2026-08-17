@@ -1,0 +1,57 @@
+/* ==========================================================================
+   COMO-RESERVAR.CSS
+   Mini-proceso de 3 pasos previo al formulario de turnos. Acá los
+   marcadores numerados (01/02/03) sí tienen sentido: describen una
+   secuencia real que la persona tiene que seguir.
+   ========================================================================== */
+
+.steps {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  padding-left: 0;
+}
+
+.step__number {
+  font-family: var(--font-utility);
+  font-size: 2.75rem;
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+  opacity: 0.9;
+}
+
+.step__title {
+  margin-bottom: 0.35rem;
+}
+
+.step__desc {
+  font-size: var(--fs-small);
+}
+
+@media (min-width: 700px) {
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Línea conectora entre pasos, sólo en desktop */
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: calc(100% + var(--space-lg) / 2);
+    width: var(--space-lg);
+    height: 1px;
+    background: var(--color-border);
+    display: none;
+  }
+
+  .steps {
+    position: relative;
+  }
+}

@@ -1,0 +1,112 @@
+/* ==========================================================================
+   HERO.CSS
+   Sección de apertura. Elemento de firma: un barrido de luz diagonal muy
+   sutil que cruza el fondo, evocando el reflejo de luz sobre una carrocería
+   recién detallada. Es puramente decorativo (aria-hidden) y respeta
+   prefers-reduced-motion (ver utilities.css).
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  padding-top: calc(var(--header-height) + var(--space-2xl));
+  padding-bottom: var(--space-2xl);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(232, 163, 61, 0.10), transparent 55%),
+    var(--color-bg);
+}
+
+/* Barrido de luz — elemento de firma del diseño */
+.hero__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgba(232, 163, 61, 0.06) 48%,
+    rgba(242, 177, 88, 0.1) 50%,
+    rgba(232, 163, 61, 0.06) 52%,
+    transparent 60%
+  );
+  background-size: 300% 300%;
+  animation: sheen-move 9s ease-in-out infinite;
+}
+
+@keyframes sheen-move {
+  0% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.hero__content {
+  max-width: 640px;
+}
+
+.hero__content .eyebrow {
+  margin-bottom: var(--space-md);
+}
+
+.hero__title {
+  margin-bottom: var(--space-md);
+}
+
+.hero__title .hero__title-accent {
+  color: var(--color-accent);
+}
+
+.hero__subtitle {
+  font-size: 1.1rem;
+  max-width: 52ch;
+  margin-bottom: var(--space-lg);
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.hero__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  border-top: 1px solid var(--color-border-soft);
+  padding-top: var(--space-lg);
+}
+
+.hero__stat-value {
+  font-family: var(--font-utility);
+  font-size: 1.9rem;
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+.hero__stat-label {
+  font-size: var(--fs-small);
+  color: var(--color-text-muted);
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 480px) {
+  .hero__stats {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+}

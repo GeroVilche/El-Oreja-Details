@@ -1,0 +1,75 @@
+/* ==========================================================================
+   TURNOS.CSS
+   Formulario de reserva de turnos. Hoy arma un link de WhatsApp estático;
+   cuando se sume JS, el botón va a construir el mensaje dinámicamente con
+   los datos cargados (ver comentario TODO en index.html).
+   ========================================================================== */
+
+.booking {
+  display: grid;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.booking__intro {
+  max-width: 480px;
+}
+
+.booking__intro .eyebrow {
+  margin-bottom: var(--space-md);
+}
+
+.booking__intro p {
+  margin-bottom: var(--space-md);
+}
+
+.booking__note {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: var(--space-md);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-lg);
+}
+
+.booking__note svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-accent);
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.booking__note p {
+  font-size: var(--fs-small);
+  margin: 0;
+}
+
+.booking-form {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.booking-form__row {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: 1fr;
+}
+
+.booking-form__submit {
+  margin-top: var(--space-xs);
+}
+
+@media (min-width: 620px) {
+  .booking-form__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 960px) {
+  .booking {
+    grid-template-columns: 0.85fr 1.15fr;
+  }
+}

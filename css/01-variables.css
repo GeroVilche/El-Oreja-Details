@@ -1,0 +1,96 @@
+/* ==========================================================================
+   VARIABLES.CSS
+   Design tokens del sitio. Todo el color, tipografía y espaciado sale de acá.
+   ¿Llegó la paleta / logo del cliente? Reemplazá los valores de esta sección
+   "COLORES" y el resto del sitio se actualiza solo. No hace falta tocar
+   ningún otro archivo.
+   ========================================================================== */
+
+:root {
+
+  /* --------------------------------------------------------------------
+     COLORES
+     Paleta provisoria "taller nocturno": grafito oscuro + ámbar (luz de
+     trabajo del detailer). Reemplazar por la paleta real del cliente.
+     -------------------------------------------------------------------- */
+
+  /* Fondos */
+  --color-bg: #12161c;             /* fondo principal */
+  --color-bg-alt: #191e26;         /* fondo de secciones alternadas */
+  --color-surface: #1f2530;        /* tarjetas, formulario */
+  --color-surface-hover: #262d3a;
+
+  /* Bordes y líneas */
+  --color-border: #2c3341;
+  --color-border-soft: #232935;
+
+  /* Texto */
+  --color-text: #f2f4f7;           /* texto principal sobre fondo oscuro */
+  --color-text-muted: #9aa4b5;     /* texto secundario */
+  --color-text-on-accent: #14181f; /* texto sobre el color de acento */
+
+  /* Acento (color de marca provisorio — el protagonista) */
+  --color-accent: #e8a33d;
+  --color-accent-hover: #f2b158;
+  --color-accent-dim: #c6852a;
+  --color-accent-soft: rgba(232, 163, 61, 0.12);
+  --color-accent-soft-strong: rgba(232, 163, 61, 0.22);
+
+  /* Utilidad */
+  --color-success: #4caf6d;
+  --color-focus: #6fb8ff;
+
+  /* --------------------------------------------------------------------
+     TIPOGRAFÍA
+     Display: condensada, con carácter de chapa automotriz (títulos).
+     Body: sans humanista, legible en texto largo.
+     Utility: para etiquetas / números / "eyebrows".
+     -------------------------------------------------------------------- */
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-utility: 'Bebas Neue', var(--font-display);
+
+  --fs-hero: clamp(2.6rem, 6vw + 1rem, 5rem);
+  --fs-h2: clamp(1.9rem, 3vw + 1rem, 2.75rem);
+  --fs-h3: clamp(1.25rem, 1.2vw + 1rem, 1.6rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-eyebrow: 0.8rem;
+
+  --lh-tight: 1.08;
+  --lh-heading: 1.2;
+  --lh-body: 1.65;
+
+  --ls-eyebrow: 0.18em;
+  --ls-display: 0.01em;
+
+  /* --------------------------------------------------------------------
+     ESPACIADO / LAYOUT
+     -------------------------------------------------------------------- */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6.5rem;
+
+  --content-width: 1180px;
+  --content-padding: clamp(1.25rem, 4vw, 3rem);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* --------------------------------------------------------------------
+     EFECTOS
+     -------------------------------------------------------------------- */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-accent: 0 8px 24px rgba(232, 163, 61, 0.25);
+
+  --transition-fast: 160ms ease;
+  --transition-base: 260ms ease;
+
+  --header-height: 76px;
+}

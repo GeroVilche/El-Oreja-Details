@@ -1,0 +1,33 @@
+/* ==========================================================================
+   UTILITIES.CSS
+   Ajustes finos, breakpoints "grandes" que afectan a varias secciones a la
+   vez, y clases helper chicas. Va al final para poder pisar reglas
+   anteriores si hace falta.
+   ========================================================================== */
+
+/* Layout de dos columnas del hero a partir de tablet */
+@media (min-width: 860px) {
+  .hero__inner {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+
+/* Visualmente oculto pero accesible para lectores de pantalla */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Separador sutil reutilizable */
+.divider {
+  height: 1px;
+  background-color: var(--color-border-soft);
+  border: none;
+}

@@ -1,0 +1,46 @@
+/* ==========================================================================
+   PORQUE-NOSOTROS.CSS
+   Bloques de diferenciales del negocio.
+   ========================================================================== */
+
+.why {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+}
+
+.why-item {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.why-item__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.why-item__icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.why-item__title {
+  margin-bottom: 0.3rem;
+}
+
+.why-item__desc {
+  font-size: var(--fs-small);
+}
+
+@media (min-width: 700px) {
+  .why {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

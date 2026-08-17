@@ -1,0 +1,96 @@
+/* ==========================================================================
+   BASE.CSS
+   Estilos base de tipografía y elementos comunes (aplican a todo el sitio).
+   ========================================================================== */
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: var(--fs-hero);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: var(--fs-h2);
+  text-transform: uppercase;
+}
+
+h3 {
+  font-size: var(--fs-h3);
+}
+
+p {
+  color: var(--color-text-muted);
+}
+
+strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* Etiqueta corta en mayúsculas que antecede a los títulos de sección
+   (ej. "SERVICIOS" arriba de "Elegí tu plan"). Usa la fuente utility. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-utility);
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--color-accent);
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 2px;
+  background: var(--color-accent);
+  display: inline-block;
+}
+
+/* Contenedor centrado, ancho máximo consistente en todas las secciones */
+.container {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: var(--content-padding);
+}
+
+/* Ritmo vertical estándar entre secciones */
+.section {
+  padding-block: var(--space-2xl);
+}
+
+.section-bg-alt {
+  background-color: var(--color-bg-alt);
+}
+
+.section-header {
+  max-width: 640px;
+  margin-bottom: var(--space-xl);
+}
+
+.section-header p {
+  margin-top: var(--space-sm);
+  font-size: 1.05rem;
+}

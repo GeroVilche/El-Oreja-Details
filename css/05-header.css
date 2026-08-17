@@ -1,0 +1,85 @@
+/* ==========================================================================
+   HEADER.CSS
+   Barra de navegación fija superior.
+   ========================================================================== */
+
+.header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 100;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  background-color: rgba(18, 22, 28, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.header__inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+/* Logo textual — reemplazar por <img> cuando llegue el logo del cliente */
+.logo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.logo__mark {
+  color: var(--color-accent);
+}
+
+.nav {
+  display: none;
+}
+
+.nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.nav__link {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.nav__link:hover {
+  color: var(--color-text);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* En mobile ocultamos el texto del botón de WhatsApp del header y dejamos
+   sólo el ícono, para no competir con el CTA principal del hero */
+.header__actions .btn--whatsapp .btn__label {
+  display: none;
+}
+
+@media (min-width: 860px) {
+  .nav {
+    display: block;
+  }
+
+  .header__actions .btn--whatsapp .btn__label {
+    display: inline;
+  }
+}

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Oreja Details | Detailing y lavado de vehículos</title>
+  <meta name="description" content="Lavado y detailing profesional de vehículos. Reservá tu turno online y confirmalo al instante por WhatsApp." />
+
+  <!-- Tipografías: Oswald (títulos), Manrope (texto), Bebas Neue (etiquetas/números) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;700;800&family=Bebas+Neue&display=swap" rel="stylesheet" />
+
+  <!--
+    HOJAS DE ESTILO
+    Cargadas en orden: variables -> reset -> base -> componentes ->
+    secciones (en el mismo orden en que aparecen en el body) -> utilities.
+    Si agregás una sección nueva, sumá su archivo antes de utilities.css.
+  -->
+  <link rel="stylesheet" href="css/01-variables.css" />
+  <link rel="stylesheet" href="css/02-reset.css" />
+  <link rel="stylesheet" href="css/03-base.css" />
+  <link rel="stylesheet" href="css/04-components.css" />
+  <link rel="stylesheet" href="css/05-header.css" />
+  <link rel="stylesheet" href="css/06-hero.css" />
+  <link rel="stylesheet" href="css/07-servicios.css" />
+  <link rel="stylesheet" href="css/08-porque-nosotros.css" />
+  <link rel="stylesheet" href="css/09-como-reservar.css" />
+  <link rel="stylesheet" href="css/10-turnos.css" />
+  <link rel="stylesheet" href="css/11-productos.css" />
+  <link rel="stylesheet" href="css/12-footer.css" />
+  <link rel="stylesheet" href="css/13-utilities.css" />
+</head>
+<body>
+
+  <!-- ======================= HEADER ======================= -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#" class="logo" aria-label="El Oreja Details, inicio">
+        <span>EL OREJA</span><span class="logo__mark">DETAILS</span>
+      </a>
+
+      <nav class="nav" aria-label="Navegación principal">
+        <ul class="nav__list">
+          <li><a class="nav__link" href="#servicios">Servicios</a></li>
+          <li><a class="nav__link" href="#porque-nosotros">Por qué nosotros</a></li>
+          <li><a class="nav__link" href="#turnos">Reservar turno</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions">
+        <!-- TODO: reemplazar 5490000000000 por el número real de WhatsApp del cliente, sin espacios ni signos -->
+        <a class="btn btn--whatsapp" href="https://wa.me/5490000000000" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z" fill="currentColor"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span class="btn__label">WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ======================= HERO ======================= -->
+    <section class="hero">
+      <div class="hero__sheen" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <span class="eyebrow">Detailing profesional</span>
+          <h1 class="hero__title">Tu auto,<br />como <span class="hero__title-accent">recién salido</span> de fábrica</h1>
+          <p class="hero__subtitle">
+            Lavado y detailing con productos premium y atención al detalle real.
+            Reservá tu turno en un minuto y recibí la confirmación directo por WhatsApp.
+          </p>
+          <div class="hero__ctas">
+            <a href="#turnos" class="btn btn--primary">Reservar turno</a>
+            <a href="#servicios" class="btn btn--ghost">Ver servicios</a>
+          </div>
+
+          <div class="hero__stats">
+            <div>
+              <div class="hero__stat-value">+500</div>
+              <div class="hero__stat-label">Vehículos atendidos</div>
+            </div>
+            <div>
+              <div class="hero__stat-value">4.9★</div>
+              <div class="hero__stat-label">Calificación promedio</div>
+            </div>
+            <div>
+              <div class="hero__stat-value">100%</div>
+              <div class="hero__stat-label">Turnos por WhatsApp</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= SERVICIOS / PLANES ======================= -->
+    <section id="servicios" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Servicios</span>
+          <h2>Elegí tu plan</h2>
+          <p>Desde un lavado exterior rápido hasta un detailing completo. Todos los planes incluyen productos de calidad profesional.</p>
+        </div>
+
+        <div class="plans">
+
+          <article class="card plan-card">
+            <h3 class="plan-card__name">Lavado Exterior</h3>
+            <p class="plan-card__desc">Ideal para el mantenimiento semanal.</p>
+            <div class="plan-card__price">
+              <span class="plan-card__price-from">Desde</span>
+              <span class="plan-card__price-value">$XX.XXX</span>
+            </div>
+            <ul class="plan-card__features">
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Lavado a mano de carrocería</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Limpieza de llantas</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Secado y abrillantado rápido</li>
+            </ul>
+            <a href="#turnos" class="btn btn--ghost btn--block">Reservar este plan</a>
+          </article>
+
+          <article class="card plan-card plan-card--featured">
+            <span class="badge plan-card__badge">Más elegido</span>
+            <h3 class="plan-card__name">Lavado Full</h3>
+            <p class="plan-card__desc">Exterior e interior, el equilibrio perfecto.</p>
+            <div class="plan-card__price">
+              <span class="plan-card__price-from">Desde</span>
+              <span class="plan-card__price-value">$XX.XXX</span>
+            </div>
+            <ul class="plan-card__features">
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Lavado Exterior</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Aspirado completo de interior</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Limpieza de tablero y paneles</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Perfumado</li>
+            </ul>
+            <a href="#turnos" class="btn btn--primary btn--block">Reservar este plan</a>
+          </article>
+
+          <article class="card plan-card">
+            <h3 class="plan-card__name">Detailing Premium</h3>
+            <p class="plan-card__desc">Tratamiento a fondo para dejarlo como nuevo.</p>
+            <div class="plan-card__price">
+              <span class="plan-card__price-from">Desde</span>
+              <span class="plan-card__price-value">$XX.XXX</span>
+            </div>
+            <ul class="plan-card__features">
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Lavado Full</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Pulido y protección de pintura</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Limpieza profunda de tapizados</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Tratamiento de plásticos y cueros</li>
+            </ul>
+            <a href="#turnos" class="btn btn--ghost btn--block">Reservar este plan</a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= POR QUÉ NOSOTROS ======================= -->
+    <section id="porque-nosotros" class="section section-bg-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Por qué nosotros</span>
+          <h2>Detalle real, no solo un lavado</h2>
+        </div>
+
+        <div class="why">
+          <div class="why-item">
+            <div class="why-item__icon">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5L12 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <h3 class="why-item__title">Productos premium</h3>
+              <p class="why-item__desc">Trabajamos con insumos profesionales pensados para cuidar la pintura y los materiales interiores.</p>
+            </div>
+          </div>
+
+          <div class="why-item">
+            <div class="why-item__icon">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <h3 class="why-item__title">Turnos sin vueltas</h3>
+              <p class="why-item__desc">Reservás online y confirmás en segundos por WhatsApp. Sin llamados, sin esperas.</p>
+            </div>
+          </div>
+
+          <div class="why-item">
+            <div class="why-item__icon">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s-7-4.35-9.5-8.5C.7 8.6 2.4 5 6 5c2 0 3.3 1.1 4 2.2C10.7 6.1 12 5 14 5c3.6 0 5.3 3.6 3.5 7.5C19 16.65 12 21 12 21z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <h3 class="why-item__title">Trato de confianza</h3>
+              <p class="why-item__desc">Cada vehículo se trata con el mismo cuidado, sea la primera vez o la número cincuenta.</p>
+            </div>
+          </div>
+
+          <div class="why-item">
+            <div class="why-item__icon">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7l8-4 8 4v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <h3 class="why-item__title">Resultado garantizado</h3>
+              <p class="why-item__desc">Si algo no quedó como esperabas, lo revisamos sin cargo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= CÓMO RESERVAR ======================= -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Cómo reservar</span>
+          <h2>Tres pasos y listo</h2>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step__number">01</div>
+            <h3 class="step__title">Elegí tu plan y horario</h3>
+            <p class="step__desc">Completá el formulario de turnos con el servicio, el día y el horario que te queden cómodos.</p>
+          </div>
+          <div class="step">
+            <div class="step__number">02</div>
+            <h3 class="step__title">Confirmamos por WhatsApp</h3>
+            <p class="step__desc">Te va a llegar un mensaje prearmado con tus datos, listo para enviar. Nosotros confirmamos disponibilidad al toque.</p>
+          </div>
+          <div class="step">
+            <div class="step__number">03</div>
+            <h3 class="step__title">Traé tu vehículo</h3>
+            <p class="step__desc">Te esperamos el día y horario acordado. El resto corre por nuestra cuenta.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= SISTEMA DE TURNOS ======================= -->
+    <section id="turnos" class="section section-bg-alt">
+      <div class="container booking">
+
+        <div class="booking__intro">
+          <span class="eyebrow">Sistema de turnos</span>
+          <h2>Reservá tu turno</h2>
+          <p>Completá tus datos y el servicio que necesitás. Al enviar, se abre WhatsApp con el mensaje ya armado para que solo tengas que confirmarlo.</p>
+
+          <div class="booking__note">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 8v5m0 3h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <p>El turno queda confirmado cuando recibís la respuesta por WhatsApp, no de forma automática.</p>
+          </div>
+        </div>
+
+        <!--
+          TODO (próxima etapa, con JS):
+          1. Prevenir el submit por defecto del formulario.
+          2. Tomar los valores de #nombre, #telefono, #servicio, #fecha, #hora y #comentario.
+          3. Armar un mensaje de texto con esos datos (usando encodeURIComponent).
+          4. Redirigir a `https://wa.me/5490000000000?text=` + mensaje codificado
+             (window.open o cambiando window.location).
+          Por ahora el botón linkea a un mensaje fijo de ejemplo para poder
+          ver el flujo funcionando de punta a punta.
+        -->
+        <form class="card booking-form" action="#" method="get">
+          <div class="booking-form__row">
+            <div class="field">
+              <label for="nombre">Nombre y apellido</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Ej: Martin Gómez" required />
+            </div>
+            <div class="field">
+              <label for="telefono">Tu teléfono</label>
+              <input type="tel" id="telefono" name="telefono" placeholder="Ej: 249 4123456" required />
+            </div>
+          </div>
+
+          <div class="booking-form__row">
+            <div class="field">
+              <label for="servicio">Servicio</label>
+              <select id="servicio" name="servicio" required>
+                <option value="" selected disabled>Elegí un plan</option>
+                <option value="Lavado Exterior">Lavado Exterior</option>
+                <option value="Lavado Full">Lavado Full</option>
+                <option value="Detailing Premium">Detailing Premium</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="vehiculo">Tipo de vehículo</label>
+              <select id="vehiculo" name="vehiculo" required>
+                <option value="" selected disabled>Elegí una opción</option>
+                <option value="Auto">Auto</option>
+                <option value="Camioneta / SUV">Camioneta / SUV</option>
+                <option value="Moto">Moto</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="booking-form__row">
+            <div class="field">
+              <label for="fecha">Fecha</label>
+              <input type="date" id="fecha" name="fecha" required />
+            </div>
+            <div class="field">
+              <label for="hora">Horario preferido</label>
+              <input type="time" id="hora" name="hora" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="comentario">Comentario <span class="hint">(opcional)</span></label>
+            <textarea id="comentario" name="comentario" placeholder="Alguna aclaración sobre el vehículo o el horario"></textarea>
+          </div>
+
+          <!-- Placeholder: enlace fijo hasta que se conecte la lógica en JS -->
+          <a
+            href="https://wa.me/5490000000000?text=Hola%2C%20quiero%20reservar%20un%20turno%20en%20El%20Oreja%20Details"
+            target="_blank"
+            rel="noopener"
+            class="btn btn--primary btn--block booking-form__submit"
+          >
+            Confirmar por WhatsApp
+          </a>
+        </form>
+
+      </div>
+    </section>
+
+    <!-- ======================= PRODUCTOS (A FUTURO) =======================
+    Sección lista para activar cuando se sume la venta de productos.
+    Para habilitarla: descomentar el bloque de abajo y agregar su link a
+    css/11-productos.css en el <head> (ya está creado y listo).
+
+    <section id="productos" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Productos</span>
+          <h2>Llevate el cuidado a casa</h2>
+          <p>Productos de detailing profesional para mantener tu vehículo entre visita y visita.</p>
+        </div>
+        <div class="products">
+          <article class="card product-card">
+            <div class="product-card__image">Imagen del producto</div>
+            <h3 class="product-card__name">Nombre del producto</h3>
+            <p class="product-card__price">$X.XXX</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= FOOTER ======================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="logo"><span>EL OREJA</span><span class="logo__mark">DETAILS</span></div>
+          <p>Lavado y detailing profesional de vehículos, con turnos simples y confirmación directa por WhatsApp.</p>
+        </div>
+
+        <div>
+          <div class="footer__col-title">Navegación</div>
+          <div class="footer__links">
+            <a href="#servicios">Servicios</a>
+            <a href="#porque-nosotros">Por qué nosotros</a>
+            <a href="#turnos">Reservar turno</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer__col-title">Contacto</div>
+          <div class="footer__links">
+            <!-- TODO: completar con los datos reales del cliente -->
+            <a href="https://wa.me/5490000000000" target="_blank" rel="noopener">WhatsApp</a>
+            <a href="mailto:contacto@elorejadetails.com">contacto@elorejadetails.com</a>
+            <a href="#">Dirección / zona de cobertura</a>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="footer__bottom">
+        <span>&copy; 2026 El Oreja Details. Todos los derechos reservados.</span>
+        <span>Sitio en desarrollo — Santiago Nuñéz</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
