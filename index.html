@@ -252,16 +252,7 @@
           </div>
         </div>
 
-        <!--
-          TODO (próxima etapa, con JS):
-          1. Prevenir el submit por defecto del formulario.
-          2. Tomar los valores de #nombre, #telefono, #servicio, #fecha, #hora y #comentario.
-          3. Armar un mensaje de texto con esos datos (usando encodeURIComponent).
-          4. Redirigir a `https://wa.me/5490000000000?text=` + mensaje codificado
-             (window.open o cambiando window.location).
-          Por ahora el botón linkea a un mensaje fijo de ejemplo para poder
-          ver el flujo funcionando de punta a punta.
-        -->
+        <!-- El submit lo maneja js/main.js: arma el mensaje con los datos cargados y abre WhatsApp -->
         <form class="card booking-form" action="#" method="get">
           <div class="booking-form__row">
             <div class="field">
@@ -311,15 +302,9 @@
             <textarea id="comentario" name="comentario" placeholder="Alguna aclaración sobre el vehículo o el horario"></textarea>
           </div>
 
-          <!-- Placeholder: enlace fijo hasta que se conecte la lógica en JS -->
-          <a
-            href="https://wa.me/5490000000000?text=Hola%2C%20quiero%20reservar%20un%20turno%20en%20El%20Oreja%20Details"
-            target="_blank"
-            rel="noopener"
-            class="btn btn--primary btn--block booking-form__submit"
-          >
+          <button type="submit" class="btn btn--primary btn--block booking-form__submit">
             Confirmar por WhatsApp
-          </a>
+          </button>
         </form>
 
       </div>
@@ -387,5 +372,6 @@
     </div>
   </footer>
 
+  <script src="js/main.js" defer></script>
 </body>
 </html>
