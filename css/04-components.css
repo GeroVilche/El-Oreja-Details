@@ -93,6 +93,18 @@
   font-weight: 600;
 }
 
+/* ---------- Tratamiento fotográfico ----------
+   Filtro único para toda foto real del sitio: unifica fuentes distintas
+   (luz cálida, fría, distintos autos) bajo la misma identidad ámbar/grafito. */
+
+.shot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(35%) sepia(12%) saturate(1.25) contrast(1.08) brightness(0.94);
+}
+
 /* ---------- Campos de formulario ---------- */
 
 .field {

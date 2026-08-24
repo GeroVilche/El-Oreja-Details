@@ -13,6 +13,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
 }
 
 .plan-card:hover {
@@ -26,10 +27,30 @@
   background: linear-gradient(180deg, var(--color-accent-soft), var(--color-surface) 40%);
 }
 
+.plan-card__media {
+  position: relative;
+  margin: calc(var(--space-lg) * -1) calc(var(--space-lg) * -1) var(--space-md);
+  aspect-ratio: 4 / 3;
+}
+
+.plan-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, var(--color-surface) 100%);
+}
+
+.plan-card--featured .plan-card__media::after {
+  background: linear-gradient(180deg, transparent 50%, var(--color-accent-soft) 80%, var(--color-surface) 100%);
+}
+
 .plan-card__badge {
   position: absolute;
-  top: -12px;
-  right: var(--space-lg);
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 1;
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent);
 }
 
 .plan-card__name {

@@ -58,6 +58,35 @@
   max-width: 640px;
 }
 
+.hero__media {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16 / 11;
+  border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-md);
+}
+
+.hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 50%, rgba(18, 22, 28, 0.55) 100%),
+    linear-gradient(90deg, rgba(18, 22, 28, 0.3), transparent 40%);
+  pointer-events: none;
+}
+
+@media (min-width: 960px) {
+  .hero__inner {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+
+  .hero__media {
+    aspect-ratio: 3 / 4;
+  }
+}
+
 .hero__content .eyebrow {
   margin-bottom: var(--space-md);
 }

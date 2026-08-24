@@ -3,6 +3,19 @@
    Bloques de diferenciales del negocio.
    ========================================================================== */
 
+.why-layout {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.why-media {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--color-border-soft);
+}
+
 .why {
   display: grid;
   gap: var(--space-lg);
@@ -43,4 +56,45 @@
   .why {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+@media (min-width: 900px) {
+  .why-layout {
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: center;
+  }
+
+  .why-media {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+/* ---------- Franja divisoria entre secciones ---------- */
+
+.divider-banner {
+  position: relative;
+  height: clamp(160px, 22vw, 260px);
+  overflow: hidden;
+}
+
+.divider-banner__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18, 22, 28, 0.4), rgba(18, 22, 28, 0.8));
+}
+
+.divider-banner__quote {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 var(--content-padding);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--color-text);
+  text-align: center;
 }
