@@ -43,3 +43,40 @@
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${mensaje}`, '_blank', 'noopener');
   });
 })();
+
+// Carrusel de planes (mobile): puntito activo según la card centrada.
+(function () {
+  const plans = document.querySelector('.plans');
+  const dots = document.querySelectorAll('.plans-dots .dot');
+  if (!plans || !dots.length) return;
+
+  const cards = Array.from(plans.querySelectorAll('.plan-card'));
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const index = cards.indexOf(entry.target);
+        dots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
+      });
+    },
+    { root: plans, threshold: 0.6 }
+  );
+
+  cards.forEach((card) => observer.observe(card));
+})();
+
+// Plan-cards expandibles (mobile): "Ver más" muestra el feature extra.
+(function () {
+  document.querySelectorAll('.plan-card__more').forEach((btn) => {
+    const card = btn.closest('.plan-card');
+    const extra = card && card.querySelector('.plan-card__features-extra');
+    if (!extra) return;
+
+    btn.addEventListener('click', () => {
+      const isOpen = extra.classList.toggle('is-open');
+      btn.textContent = isOpen ? 'Ver menos' : 'Ver más';
+      btn.setAttribute('aria-expanded', String(isOpen));
+    });
+  });
+})();
