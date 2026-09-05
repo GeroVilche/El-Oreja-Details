@@ -5,13 +5,6 @@
    anteriores si hace falta.
    ========================================================================== */
 
-/* Layout de dos columnas del hero a partir de tablet */
-@media (min-width: 860px) {
-  .hero__inner {
-    grid-template-columns: 1.1fr 0.9fr;
-  }
-}
-
 /* Visualmente oculto pero accesible para lectores de pantalla */
 .visually-hidden {
   position: absolute;

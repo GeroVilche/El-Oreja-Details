@@ -11,16 +11,40 @@
   padding-top: calc(var(--header-height) + var(--space-2xl));
   padding-bottom: var(--space-2xl);
   overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 700px) {
+  .hero__bg {
+    object-position: center 30%;
+  }
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
   background:
-    radial-gradient(ellipse at 15% 0%, rgba(232, 163, 61, 0.10), transparent 55%),
-    var(--color-bg);
+    linear-gradient(90deg, var(--color-bg) 20%, rgba(18, 22, 28, 0.6) 55%, rgba(18, 22, 28, 0.15) 100%),
+    radial-gradient(ellipse at 15% 0%, rgba(232, 163, 61, 0.10), transparent 55%);
 }
 
 /* Barrido de luz — elemento de firma del diseño */
 .hero__sheen {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
   background: linear-gradient(
     115deg,
@@ -48,7 +72,7 @@
 
 .hero__inner {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: grid;
   gap: var(--space-xl);
   align-items: center;
@@ -110,3 +134,10 @@
     gap: var(--space-sm);
   }
 }
+
+@media (max-width: 700px) {
+  .hero {
+    background-position: center 50%;
+  }
+}
+

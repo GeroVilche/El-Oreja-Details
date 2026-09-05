@@ -13,7 +13,7 @@
   justify-content: center;
   gap: var(--space-xs);
   padding: 0.9rem 1.75rem;
-  border-radius: var(--radius-pill);
+  clip-path: var(--clip-chamfer);
   font-family: var(--font-utility);
   font-size: 1rem;
   letter-spacing: 0.04em;
@@ -30,22 +30,24 @@
 .btn--primary {
   background-color: var(--color-accent);
   color: var(--color-text-on-accent);
-  box-shadow: var(--shadow-accent);
 }
 
 .btn--primary:hover {
   background-color: var(--color-accent-hover);
-  box-shadow: 0 10px 28px rgba(232, 163, 61, 0.35);
 }
 
 .btn--ghost {
-  background-color: transparent;
+  background:
+    linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+    linear-gradient(var(--color-border), var(--color-border)) border-box;
   color: var(--color-text);
-  border: 1px solid var(--color-border);
+  border: 1px solid transparent;
 }
 
 .btn--ghost:hover {
-  border-color: var(--color-accent);
+  background:
+    linear-gradient(var(--color-bg), var(--color-bg)) padding-box,
+    linear-gradient(var(--color-accent), var(--color-accent)) border-box;
   color: var(--color-accent);
 }
 
@@ -54,13 +56,17 @@
 }
 
 .btn--whatsapp {
-  background-color: var(--color-surface);
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    linear-gradient(var(--color-border), var(--color-border)) border-box;
   color: var(--color-text);
-  border: 1px solid var(--color-border);
+  border: 1px solid transparent;
 }
 
 .btn--whatsapp:hover {
-  border-color: var(--color-accent);
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    linear-gradient(var(--color-accent), var(--color-accent)) border-box;
 }
 
 .btn--whatsapp svg {
@@ -72,11 +78,13 @@
 /* ---------- Tarjeta base ---------- */
 
 .card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border-soft);
-  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    linear-gradient(var(--color-border-soft), var(--color-border-soft)) border-box;
+  border: 1px solid transparent;
+  clip-path: var(--clip-chamfer);
   padding: var(--space-lg);
-  transition: transform var(--transition-base), border-color var(--transition-base);
+  transition: background var(--transition-base);
 }
 
 /* ---------- Badge / chip pequeño ---------- */

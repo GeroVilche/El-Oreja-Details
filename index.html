@@ -9,8 +9,7 @@
   <!-- Tipografías: Oswald (títulos), Manrope (texto), Bebas Neue (etiquetas/números) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;700;800&family=Bebas+Neue&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;700;800&family=Lexend:wght@500;600;700&display=swap" rel="stylesheet" />
   <!--
     HOJAS DE ESTILO
     Cargadas en orden: variables -> reset -> base -> componentes ->
@@ -30,6 +29,7 @@
   <link rel="stylesheet" href="css/11-productos.css" />
   <link rel="stylesheet" href="css/12-footer.css" />
   <link rel="stylesheet" href="css/13-utilities.css" />
+  <link rel="stylesheet" href="css/14-location.css" />
 </head>
 <body>
 
@@ -62,6 +62,8 @@
 
     <!-- ======================= HERO ======================= -->
     <section class="hero">
+      <img src="img/img-hero-2.jpg" alt="" class="hero__bg" aria-hidden="true" />
+      <div class="hero__overlay" aria-hidden="true"></div>
       <div class="hero__sheen" aria-hidden="true"></div>
       <div class="container hero__inner">
         <div class="hero__content">
@@ -106,7 +108,10 @@
         <div class="plans">
 
           <article class="card plan-card">
-            <h3 class="plan-card__name">Lavado Exterior</h3>
+            <div class="plan-card__image">
+            <img src="img/lavado-de-mantenimiento-2.jpg" alt="Auto siendo lavado con hidrolavadora" />
+            </div>
+            <h3 class="plan-card__name">Lavado de Mantenimiento</h3>
             <p class="plan-card__desc">Ideal para el mantenimiento semanal.</p>
             <div class="plan-card__price">
               <span class="plan-card__price-from">Desde</span>
@@ -120,32 +125,37 @@
             <a href="#turnos" class="btn btn--ghost btn--block">Reservar este plan</a>
           </article>
 
-          <article class="card plan-card plan-card--featured">
-            <span class="badge plan-card__badge">Más elegido</span>
-            <h3 class="plan-card__name">Lavado Full</h3>
+          <article class="card plan-card">
+            <div class="plan-card__image">
+            <img src="img/lavado-completo-2.jpg" alt="Interior del vehículo limpio, volante y tablero" />
+            </div>
+            <h3 class="plan-card__name">Lavado Completo</h3>
             <p class="plan-card__desc">Exterior e interior, el equilibrio perfecto.</p>
             <div class="plan-card__price">
               <span class="plan-card__price-from">Desde</span>
               <span class="plan-card__price-value">$XX.XXX</span>
             </div>
             <ul class="plan-card__features">
-              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Lavado Exterior</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Lavado de Mantenimiento</li>
               <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Aspirado completo de interior</li>
               <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Limpieza de tablero y paneles</li>
               <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Perfumado</li>
             </ul>
-            <a href="#turnos" class="btn btn--primary btn--block">Reservar este plan</a>
+            <a href="#turnos" class="btn btn--ghost btn--block">Reservar este plan</a>
           </article>
 
           <article class="card plan-card">
-            <h3 class="plan-card__name">Detailing Premium</h3>
+            <div class="plan-card__image">
+            <img src="img/lavado-a-fondo.jpg" alt="Pulido profesional de faro y carrocería" />            
+            </div>
+            <h3 class="plan-card__name">Detailing a Fondo</h3>
             <p class="plan-card__desc">Tratamiento a fondo para dejarlo como nuevo.</p>
             <div class="plan-card__price">
               <span class="plan-card__price-from">Desde</span>
               <span class="plan-card__price-value">$XX.XXX</span>
             </div>
             <ul class="plan-card__features">
-              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Lavado Full</li>
+              <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Todo lo del Lavado Completo</li>
               <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Pulido y protección de pintura</li>
               <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Limpieza profunda de tapizados</li>
               <li><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Tratamiento de plásticos y cueros</li>
@@ -159,6 +169,8 @@
 
     <!-- ======================= POR QUÉ NOSOTROS ======================= -->
     <section id="porque-nosotros" class="section section-bg-alt">
+      <img src="img/faro-detalle.jpg" alt="" class="why__bg" aria-hidden="true" />
+      <div class="why__overlay" aria-hidden="true"></div>
       <div class="container">
         <div class="section-header">
           <span class="eyebrow">Por qué nosotros</span>
@@ -279,9 +291,9 @@
               <label for="servicio">Servicio</label>
               <select id="servicio" name="servicio" required>
                 <option value="" selected disabled>Elegí un plan</option>
-                <option value="Lavado Exterior">Lavado Exterior</option>
-                <option value="Lavado Full">Lavado Full</option>
-                <option value="Detailing Premium">Detailing Premium</option>
+                <option value="Lavado de Mantenimiento">Lavado de Mantenimiento</option>
+                <option value="Lavado Completo">Lavado Completo</option>
+                <option value="Detailing a Fondo">Detailing a Fondo</option>
               </select>
             </div>
             <div class="field">
@@ -325,6 +337,30 @@
       </div>
     </section>
 
+    <!-- ======================= UBICACIÓN ======================= -->
+    <section class="section location">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow">Ubicación</span>
+          <h2>Encontranos</h2>
+          <p>Vení con tu vehículo al horario que reservaste.</p>
+        </div>
+
+        <div class="location__map">
+          <!-- TODO: reemplazar por la dirección real del lavadero de Santi -->
+          <iframe
+            src="https://www.google.com/maps?q=Tandil,Buenos+Aires,Argentina&output=embed"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Ubicación de El Oreja Details"
+          ></iframe>
+        </div>
+      </div>
+    </section>
     <!-- ======================= PRODUCTOS (A FUTURO) =======================
     Sección lista para activar cuando se sume la venta de productos.
     Para habilitarla: descomentar el bloque de abajo y agregar su link a
@@ -382,7 +418,7 @@
 
       <div class="footer__bottom">
         <span>&copy; 2026 El Oreja Details. Todos los derechos reservados.</span>
-        <span>Sitio en desarrollo — Santiago Nuñéz</span>
+        <span>Sitio en desarrollo — Santiago Núñez</span>
       </div>
     </div>
   </footer>

@@ -1,0 +1,18 @@
+/* ==========================================================================
+   LOCATION.CSS
+   Mapa embebido con la ubicación del local.
+   ========================================================================== */
+
+.location__map {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  clip-path: var(--clip-chamfer);
+  overflow: hidden;
+}
+
+.location__map iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: grayscale(0.3) invert(0.92) contrast(0.9);
+}
