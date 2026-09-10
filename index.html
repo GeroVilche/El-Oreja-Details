@@ -278,11 +278,24 @@
           <div class="booking-form__row">
             <div class="field">
               <label for="nombre">Nombre y apellido</label>
-              <input type="text" id="nombre" name="nombre" placeholder="Ej: Martin Gómez" required />
+              <input 
+                type="text" 
+                id="nombre" 
+                name="nombre" 
+                placeholder="Ej: Martin Gómez" 
+                required />
             </div>
             <div class="field">
               <label for="telefono">Tu teléfono</label>
-              <input type="tel" id="telefono" name="telefono" placeholder="Ej: 249 4123456" required />
+              <input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                placeholder="Ej: 249 4123456"
+                pattern="[0-9 ]{6,15}"
+                title="Solo números (podés incluir espacios), entre 6 y 15 dígitos"
+                required
+                />
             </div>
           </div>
 
@@ -313,8 +326,10 @@
               <input type="date" id="fecha" name="fecha" required />
             </div>
             <div class="field">
-              <label for="hora">Horario preferido</label>
-              <input type="time" id="hora" name="hora" required />
+              <label for="hora">Horario disponible</label>
+              <select name="hora" id="hora" required>
+                <option value="" selected disabled>Elegí fecha y servicio primero</option>
+              </select>
             </div>
           </div>
 
@@ -324,14 +339,9 @@
           </div>
 
           <!-- Placeholder: enlace fijo hasta que se conecte la lógica en JS -->
-          <a
-            href="https://wa.me/5490000000000?text=Hola%2C%20quiero%20reservar%20un%20turno%20en%20El%20Oreja%20Details"
-            target="_blank"
-            rel="noopener"
-            class="btn btn--primary btn--block booking-form__submit"
-          >
+          <button type="submit" class="btn btn--primary btn--block booking-form__submit">
             Confirmar por WhatsApp
-          </a>
+          </button>
         </form>
 
       </div>
@@ -422,6 +432,8 @@
       </div>
     </div>
   </footer>
+
+    <script src="js/turnos.js"></script>
 
 </body>
 </html>
