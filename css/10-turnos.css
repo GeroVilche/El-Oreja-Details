@@ -28,9 +28,11 @@
   gap: 0.6rem;
   align-items: flex-start;
   padding: var(--space-md);
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border-soft);
-  border-radius: var(--radius-md);
+  background:
+    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
+    linear-gradient(var(--color-border-soft), var(--color-border-soft)) border-box;
+  border: 1px solid transparent;
+  clip-path: var(--clip-chamfer);
   margin-top: var(--space-lg);
 }
 

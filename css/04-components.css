@@ -131,6 +131,12 @@
   transition: border-color var(--transition-fast);
 }
 
+.field select {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .field input::placeholder,
 .field textarea::placeholder {
   color: var(--color-text-muted);
