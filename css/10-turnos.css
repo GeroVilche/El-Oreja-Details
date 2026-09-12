@@ -13,6 +13,7 @@
 
 .booking__intro {
   max-width: 480px;
+  min-width: 0;
 }
 
 .booking__intro .eyebrow {
@@ -47,21 +48,26 @@
 .booking__note p {
   font-size: var(--fs-small);
   margin: 0;
+  min-width: 0;
 }
 
 .booking-form {
   display: grid;
   gap: var(--space-md);
+  min-width: 0;
 }
 
 .booking-form__row {
   display: grid;
   gap: var(--space-md);
   grid-template-columns: 1fr;
+  min-width: 0;
 }
 
 .booking-form__submit {
   margin-top: var(--space-xs);
+  white-space: normal;
+  text-align: center;
 }
 
 @media (min-width: 620px) {
