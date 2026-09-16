@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="css/12-footer.css" />
   <link rel="stylesheet" href="css/13-utilities.css" />
   <link rel="stylesheet" href="css/14-location.css" />
+  <link rel="stylesheet" href="css/15-day-schedule.css">
 </head>
 <body>
 
@@ -258,9 +259,21 @@
           <h2>Reservá tu turno</h2>
           <p>Completá tus datos y el servicio que necesitás. Al enviar, se abre WhatsApp con el mensaje ya armado para que solo tengas que confirmarlo.</p>
 
-          <div class="booking__note">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 8v5m0 3h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <p>El turno queda confirmado cuando recibís la respuesta por WhatsApp, no de forma automática.</p>
+          <div class="day-schedule">
+            <div class="day-schedule__header">
+              <button type="button" class="day-schedule__nav" id="diaAnterior" aria-label="Día anterior"><</button>
+              <span class="day-schedule__date" id="diaLabel">Elegí una fecha</span>
+              <button type="button" class="day-schedule__nav" id="diaSiguiente" aria-label="Día siguiente">></button>
+            </div>
+            <p class="day-schedule__subtitle">Horarios del día</p>
+            <div class="day-schedule__timeline">
+              <div class="day-schedule__hours" id="horasLabels"></div>
+              <div class="day-schedule__track" id="turnosTrack"></div>
+            </div>
+            <div class="day-schedule__legend">
+              <span><i class="day-schedule__swatch day-schedule__swatch--busy"></i>Ocupado</span>
+              <span><i class="day-schedule__swatch day-schedule__swatch--free"></i>Libre</span>
+            </div>
           </div>
         </div>
 

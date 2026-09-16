@@ -48,7 +48,7 @@ async function actualizarHorariosDisponibles() {
     }
 }
 
-inputFecha.addEventListener('change', actualizarHorariosDisponibles);
+inputFecha.addEventListener('change', actualizarHorariosDisponibles); inputFecha.addEventListener('change', actualizarCalendarioVisual);
 selectServicio.addEventListener('change', actualizarHorariosDisponibles);
 
 const formulario = document.querySelector('.booking-form');
@@ -85,3 +85,88 @@ formulario.addEventListener('submit', async (evento) => {
         alert('No se pudo conectar con el servidor. ¿Está corriendo el backend?');
     }
 });
+
+// CALENDARIO VISUAL
+const HORA_INICIO_CALENDARIO = 9;    // 9:00, coincide con el horario de apertura
+const HORA_FIN_CALENDARIO = 18;     // 18:00, coincide con el cierre
+const ALTO_POR_HORA_PX = 36;       // 2.25rem = 36px (asumiendo 1rem = 16px)
+
+const horasLabels = document.getElementById('horasLabels');
+const turnosTrack = document.getElementById('turnosTrack');
+const diaLabel = document.getElementById('diaLabel');
+
+function horaAMinutosFrontend(hora) {
+    const [horas, minutos] = hora.split(':').map(Number);
+    return horas * 60 + minutos;
+}
+
+function dibujarFranjasHorarias() {
+    horasLabels.innerHTML = '';
+    turnosTrack.innerHTML = '';
+
+    for (let h = HORA_INICIO_CALENDARIO; h < HORA_FIN_CALENDARIO; h++) {
+        const etiqueta = document.createElement('span');
+        etiqueta.textContent = String(h).padStart(2, '0');
+        horasLabels.appendChild(etiqueta);
+
+        const franja = document.createElement('div');
+        franja.className = 'day-schedule__slot';
+        turnosTrack.appendChild(franja);
+    }
+}
+
+async function actualizarCalendarioVisual() {
+    const fecha = inputFecha.value;
+
+    if (!fecha) {
+        diaLabel.textContent = 'Elegí una fecha';
+        return
+    }
+
+    const fechaObj = new Date(fecha + 'T00:00:00');
+    diaLabel.textContent = fechaObj.toLocaleDateString('es-AR', {
+        weekday: 'long', day: 'numeric', month: 'long',
+    });
+
+    dibujarFranjasHorarias();
+
+    try {
+        const respuesta = await fetch(`${API_URL}/turnos?fecha=${fecha}`);
+        const turnosDelDia = await respuesta.json();
+
+        turnosDelDia.forEach(turno => {
+            const inicioMin = horaAMinutosFrontend(turno.horaInicio) - HORA_INICIO_CALENDARIO * 60;
+            const finMin = horaAMinutosFrontend(turno.horaFin) - HORA_INICIO_CALENDARIO * 60;
+
+            const bloque = document.createElement('div');
+            bloque.className = 'day-schedule__block';
+            bloque.style.top = `${(inicioMin / 60) * ALTO_POR_HORA_PX}px`;
+            bloque.style.height = `${((finMin - inicioMin) / 60) * ALTO_POR_HORA_PX}px`;
+            turnosTrack.appendChild(bloque);
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+//Funcionalidad de las flechas del calendario visual para cambiar de dia
+const botonDiaAnterior = document.getElementById('diaAnterior');
+const botonDiaSiguiente = document.getElementById('diaSiguiente');
+
+function cambiarDia(delta) {
+    if (!inputFecha.value) return;
+
+    const fechaActual = new Date(inputFecha.value + 'T00:00:00');
+    fechaActual.setDate(fechaActual.getDate() + delta);
+
+    const año = fechaActual.getFullYear();
+    const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+    const dia = String(fechaActual.getDate()).padStart(2, '0');
+    inputFecha.value = `${año}-${mes}-${dia}`;
+
+    inputFecha.dispatchEvent(new Event('change'));
+}
+
+botonDiaAnterior.addEventListener('click', () => cambiarDia(-1));
+botonDiaSiguiente.addEventListener('click', () => cambiarDia(1));
