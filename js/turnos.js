@@ -78,7 +78,14 @@ formulario.addEventListener('submit', async (evento) => {
             return;
         }
 
-        window.location.href = datos.linkWhatsApp;
+        actualizarCalendarioVisual();
+
+        formulario.innerHTML = `
+            <h3>¡Turno reservado! 🎉</h3>
+            <p>Guardá este link por si necesitás cancelar tu turno más adelante:</p>
+            <p><a href="${datos.linkCancelacion}" target="_blank" rel="noopener">${datos.linkCancelacion}</a></p>
+            <a href="${datos.linkWhatsApp}" class="btn btn--primary btn--block" id="btnIrWhatsapp">Continuar a WhatsApp</a>
+        `;
 
     }   catch (error) {
         console.error(error);

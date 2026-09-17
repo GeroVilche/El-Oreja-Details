@@ -1,0 +1,38 @@
+/* ==========================================================================
+   CANCELAR.CSS
+   Página standalone a la que apunta el link de cancelación de turno.
+   ========================================================================== */
+.cancelar-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-lg) 0;
+}
+
+.cancelar-card {
+    max-width: 420px;
+    margin-inline: auto;
+}
+
+.cancelar-card__detalle {
+    margin: var(--space-md) 0;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border-soft);
+}
+
+.cancelar-card__detalle p {
+    margin-bottom: 0.4rem;
+}
+
+.cancelar-card__estado {
+    font-weight: 600;
+}
+
+.cancelar-card__estado--exito {
+    color: var(--color-success);
+}
+
+.cancelar-card__estado--error {
+    color: var(--color-text-muted);
+}
