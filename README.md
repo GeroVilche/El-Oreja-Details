@@ -13,7 +13,7 @@ permite cancelar el turno si el cliente cambia de planes.
 - Google Calendar API (creación y cancelación de eventos)
 
 ## Repos relacionados
-- Backend: [link al repo del backend]
+- Backend: [(https://github.com/GeroVilche/El-Oreja-Backend)]
 
 ## Estado
 Proyecto funcional corriendo en local. Próximo paso: desplegarlo en un hosting 
