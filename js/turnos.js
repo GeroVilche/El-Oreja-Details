@@ -21,7 +21,7 @@ async function actualizarHorariosDisponibles() {
     }
 
     // Mientras esperamos la respuesta, mostramos un mensaje de carga
-    selectHora.innerHTML = 'option value="" selected disabled>Cargando horarios...</option>';
+    selectHora.innerHTML = '<option value="" selected disabled>Cargando horarios...</option>';
 
     try {
         const url = `${API_URL}/disponibilidad?fecha=${fecha}&servicio=${encodeURIComponent(servicio)}`;
@@ -29,11 +29,11 @@ async function actualizarHorariosDisponibles() {
         const datos = await respuesta.json();
 
         if (datos.horariosDisponibles.length === 0) {
-            selectHora.innerHTML = 'option value="" selected disabled>No hay horarios disponibles ese día</option>';
+            selectHora.innerHTML = '<option value="" selected disabled>No hay horarios disponibles ese día</option>';
             return;
         }
 
-        selectHora.innerHTML = '<option value="" selected disabled>Elegí un horario</option>'
+        selectHora.innerHTML = '<option value="" selected disabled>Elegí un horario</option>';
     
         datos.horariosDisponibles.forEach(hora => {
             const opcion = document.createElement('option');
@@ -44,7 +44,7 @@ async function actualizarHorariosDisponibles() {
 
     } catch (error) {
     console.error(error);
-    selectHora.innerHTML = '<option value="" selected disabled>Error al cargar horarios</option>'
+    selectHora.innerHTML = '<option value="" selected disabled>Error al cargar horarios</option>';
     }
 }
 
