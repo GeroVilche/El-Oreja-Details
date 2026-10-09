@@ -36,3 +36,22 @@
 .cancelar-card__estado--error {
     color: var(--color-text-muted);
 }
+
+/* Confirmación antes de cancelar */
+.cancelar-card__pregunta {
+    margin-bottom: var(--space-sm);
+    color: var(--color-text-muted);
+}
+
+/* Botones apilados: .btn tiene white-space: nowrap, y dos botones lado a lado
+   en una tarjeta angosta desbordarían en el celular */
+.cancelar-card__botones {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.cancelar-card__botones .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

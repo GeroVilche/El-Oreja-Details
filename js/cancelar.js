@@ -31,7 +31,7 @@ async function cargarTurno() {
                 <p><strong>Fecha:</strong> ${turno.fecha}</p>
                 <p><strong>Horario:</strong> ${turno.horaInicio} a ${turno.horaFin}</p>
             </div>
-            <button type="button" class="btn btn--ghost btn--block" id="btnCancelar">Cancelar este turno</button>
+            <div class="cancelar-card__acciones" id="accionesTurno"></div>
         `;
 
         // El nombre lo escribió el cliente en el formulario: va con textContent (nunca con innerHTML)
@@ -40,12 +40,49 @@ async function cargarTurno() {
             document.getElementById('saludoTurno').textContent = `Hola ${turno.primerNombre}, este es tu turno`;
         }
 
-        document.getElementById('btnCancelar').addEventListener('click', () => cancelarTurno(id));
+        mostrarBotonCancelar(id);
 
     } catch (error) {
         console.error(error);
         cancelarCard.innerHTML = '<p class="cancelar-card__estado cancelar-card__estado--error">No se pudo conectar con el servidor.</p>';
     }
+}
+
+// Estado inicial: un solo botón. Todavía no se borra nada.
+function mostrarBotonCancelar(id) {
+    const acciones = document.getElementById('accionesTurno');
+    acciones.innerHTML = `
+        <button type="button" class="btn btn--ghost btn--block" id="btnCancelar">Cancelar este turno</button>
+    `;
+    document.getElementById('btnCancelar').addEventListener('click', () => mostrarConfirmacion(id));
+}
+
+// Segundo paso: pedimos confirmación antes de borrar (cancelar no se puede deshacer)
+function mostrarConfirmacion(id) {
+    const acciones = document.getElementById('accionesTurno');
+    acciones.innerHTML = `
+        <p class="cancelar-card__pregunta">¿Seguro que querés cancelar este turno? No se puede deshacer.</p>
+        <div class="cancelar-card__botones">
+            <button type="button" class="btn btn--primary btn--block" id="btnSiCancelar">Sí, cancelar</button>
+            <button type="button" class="btn btn--ghost btn--block" id="btnNoCancelar">No, mantener mi turno</button>
+        </div>
+    `;
+
+    const btnSi = document.getElementById('btnSiCancelar');
+    const btnNo = document.getElementById('btnNoCancelar');
+
+    btnNo.addEventListener('click', () => mostrarBotonCancelar(id));
+
+    btnSi.addEventListener('click', () => {
+        // Desactivamos los botones para que un doble toque no mande dos DELETE
+        btnSi.disabled = true;
+        btnNo.disabled = true;
+        btnSi.textContent = 'Cancelando...';
+        cancelarTurno(id);
+    });
+
+    // El foco va a la opción segura: si alguien aprieta Enter sin querer, no cancela
+    btnNo.focus();
 }
 
 async function cancelarTurno(id) {
