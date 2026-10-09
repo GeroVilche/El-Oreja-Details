@@ -1,5 +1,7 @@
 const API_URL = 'http://localhost:3000';
 const cancelarCard = document.getElementById('cancelarCard');
+const PAGINA_INICIO = 'index.html';
+const SEGUNDOS_REDIRECCION = 10;
 
 function obtenerIdDeURL() {
     const params = new URLSearchParams(window.location.search);
@@ -10,7 +12,7 @@ async function cargarTurno() {
     const id = obtenerIdDeURL();
 
     if (!id) {
-        cancelarCard.innerHTML = '<p class="cancelar-card__estado cancelar-card__estado--error">No se encontró ningún turno en este link.</p>';
+        mostrarEstadoFinal('No se encontró ningún turno en este link.', 'error');
         return;
     }
 
@@ -18,7 +20,7 @@ async function cargarTurno() {
         const respuesta = await fetch(`${API_URL}/turnos/${id}`);
 
         if (!respuesta.ok) {
-            cancelarCard.innerHTML = '<p class="cancelar-card__estado cancelar-card__estado--error">Este turno ya no existe (puede que ya haya sido cancelado).</p>';
+            mostrarEstadoFinal('Este turno ya no existe (puede que ya haya sido cancelado).', 'error');
             return;
         }
 
@@ -44,7 +46,7 @@ async function cargarTurno() {
 
     } catch (error) {
         console.error(error);
-        cancelarCard.innerHTML = '<p class="cancelar-card__estado cancelar-card__estado--error">No se pudo conectar con el servidor.</p>';
+        mostrarEstadoFinal('No se pudo conectar con el servidor.', 'error');
     }
 }
 
@@ -90,16 +92,55 @@ async function cancelarTurno(id) {
         const respuesta = await fetch(`${API_URL}/turnos/${id}`, { method: 'DELETE' });
 
         if (!respuesta.ok) {
-            cancelarCard.innerHTML = '<p class="cancelar-card__estado cancelar-card__estado--error">No se pudo cancelar el turno.</p>';        
+            mostrarEstadoFinal('No se pudo cancelar el turno.', 'error');
             return;
         }
-        
-        cancelarCard.innerHTML = '<p class="cancelar-card__estado cancelar-card__estado--exito">✓ Turno cancelado con éxito.</p>';
+
+        mostrarEstadoFinal('✓ Turno cancelado con éxito.', 'exito');
+        iniciarRedireccion();
 
     } catch (error) {
         console.error(error);
-        cancelarCard.innerHTML = '<p class="cancelar-card__estado cancelar-card__estado--error">No se pudo conectar con el servidor.</p>';
+        mostrarEstadoFinal('No se pudo conectar con el servidor.', 'error');
     }
+}
+
+// Pantalla final (éxito o error): mensaje + salidas claras, para que el usuario nunca quede "encerrado" acá
+function mostrarEstadoFinal(mensaje, tipo) {
+    cancelarCard.innerHTML = `
+        <p class="cancelar-card__estado cancelar-card__estado--${tipo}" id="mensajeEstado"></p>
+        <div class="cancelar-card__botones">
+            <a href="${PAGINA_INICIO}#turnos" class="btn btn--primary btn--block">Reservar otro turno</a>
+            <a href="${PAGINA_INICIO}" class="btn btn--ghost btn--block">Volver al inicio</a>
+        </div>
+    `;
+    document.getElementById('mensajeEstado').textContent = mensaje;
+}
+
+// Después de cancelar con éxito: vuelve solo al inicio, con la cuenta regresiva a la vista
+function iniciarRedireccion() {
+    let segundosRestantes = SEGUNDOS_REDIRECCION;
+
+    const aviso = document.createElement('p');
+    aviso.className = 'cancelar-card__aviso';
+    document.getElementById('mensajeEstado').after(aviso);
+
+    const actualizarAviso = () => {
+        aviso.textContent = `Te llevamos al inicio en ${segundosRestantes} s...`;
+    };
+    actualizarAviso();
+
+    const intervalo = setInterval(() => {
+        segundosRestantes--;
+
+        if (segundosRestantes <= 0) {
+            clearInterval(intervalo);
+            window.location.href = PAGINA_INICIO;
+            return;
+        }
+
+        actualizarAviso();
+    }, 1000);
 }
 
 cargarTurno();

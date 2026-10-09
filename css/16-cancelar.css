@@ -27,6 +27,14 @@
 
 .cancelar-card__estado {
     font-weight: 600;
+    margin-bottom: var(--space-md);
+}
+
+.cancelar-card__aviso {
+    margin-top: calc(-1 * var(--space-sm));
+    margin-bottom: var(--space-md);
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
 }
 
 .cancelar-card__estado--exito {
