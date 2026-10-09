@@ -25,7 +25,7 @@ async function cargarTurno() {
         const turno = await respuesta.json();
 
         cancelarCard.innerHTML = `
-            <h2>Tu turno</h2>
+            <h2 id="saludoTurno">Tu turno</h2>
             <div class="cancelar-card__detalle">
                 <p><strong>Servicio:</strong> ${turno.servicio || 'No especificado'}</p>
                 <p><strong>Fecha:</strong> ${turno.fecha}</p>
@@ -33,6 +33,12 @@ async function cargarTurno() {
             </div>
             <button type="button" class="btn btn--ghost btn--block" id="btnCancelar">Cancelar este turno</button>
         `;
+
+        // El nombre lo escribió el cliente en el formulario: va con textContent (nunca con innerHTML)
+        // para que el navegador lo muestre como texto y no lo interprete como HTML
+        if (turno.primerNombre) {
+            document.getElementById('saludoTurno').textContent = `Hola ${turno.primerNombre}, este es tu turno`;
+        }
 
         document.getElementById('btnCancelar').addEventListener('click', () => cancelarTurno(id));
 
