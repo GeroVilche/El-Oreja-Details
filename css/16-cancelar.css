@@ -15,14 +15,65 @@
     margin-inline: auto;
 }
 
-.cancelar-card__detalle {
-    margin: var(--space-md) 0;
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--color-border-soft);
+/* Nombre del negocio arriba de la tarjeta: el usuario llega desde WhatsApp
+   y tiene que saber dónde está. Lleva al inicio. (Acá va el logo de Santi) */
+.cancelar-marca {
+    display: block;
+    width: fit-content;
+    margin: 0 auto var(--space-md);
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    transition: color var(--transition-fast);
 }
 
-.cancelar-card__detalle p {
-    margin-bottom: 0.4rem;
+.cancelar-marca:hover {
+    color: var(--color-text);
+}
+
+/* Saludo: el azul se usa SOLO en el nombre, para que sea el único punto de color */
+.cancelar-card__titulo {
+    font-size: 1.6rem;
+    line-height: var(--lh-heading);
+}
+
+.cancelar-card__nombre {
+    color: var(--color-accent-hover);
+    overflow-wrap: anywhere; /* por si alguien pone un nombre larguísimo sin espacios */
+}
+
+.cancelar-card__subtitulo {
+    margin-top: 0.2rem;
+    color: var(--color-text-muted);
+}
+
+/* Datos del turno: el horario es lo que el usuario vino a verificar → lo más grande */
+.cancelar-card__turno {
+    margin: var(--space-md) 0;
+    padding: var(--space-md) 0;
+    border-block: 1px solid var(--color-border-soft);
+}
+
+.cancelar-card__dia {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--color-text-muted);
+}
+
+.cancelar-card__hora {
+    margin: 0.1rem 0 0.35rem;
+    font-family: var(--font-utility);
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    color: var(--color-text);
+}
+
+.cancelar-card__servicio {
+    color: var(--color-text-muted);
 }
 
 .cancelar-card__estado {

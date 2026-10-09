@@ -27,19 +27,18 @@ async function cargarTurno() {
         const turno = await respuesta.json();
 
         cancelarCard.innerHTML = `
-            <h2 id="saludoTurno">Tu turno</h2>
-            <div class="cancelar-card__detalle">
-                <p><strong>Servicio:</strong> ${turno.servicio || 'No especificado'}</p>
-                <p><strong>Fecha:</strong> ${turno.fecha}</p>
-                <p><strong>Horario:</strong> ${turno.horaInicio} a ${turno.horaFin}</p>
+            <h1 class="cancelar-card__titulo" id="saludoTurno">Tu turno</h1>
+            <p class="cancelar-card__subtitulo">Estos son los datos de tu turno.</p>
+            <div class="cancelar-card__turno">
+                <p class="cancelar-card__dia">${formatearFecha(turno.fecha)}</p>
+                <p class="cancelar-card__hora">${turno.horaInicio} – ${turno.horaFin}</p>
+                <p class="cancelar-card__servicio">${turno.servicio || 'Servicio no especificado'}</p>
             </div>
             <div class="cancelar-card__acciones" id="accionesTurno"></div>
         `;
 
-        // El nombre lo escribió el cliente en el formulario: va con textContent (nunca con innerHTML)
-        // para que el navegador lo muestre como texto y no lo interprete como HTML
         if (turno.primerNombre) {
-            document.getElementById('saludoTurno').textContent = `Hola ${turno.primerNombre}, este es tu turno`;
+            mostrarSaludo(turno.primerNombre);
         }
 
         mostrarBotonCancelar(id);
@@ -48,6 +47,27 @@ async function cargarTurno() {
         console.error(error);
         mostrarEstadoFinal('No se pudo conectar con el servidor.', 'error');
     }
+}
+
+// "Hola, Juan" con el nombre resaltado en color.
+// El nombre lo escribió el cliente en el formulario: va con textContent (nunca con innerHTML)
+// para que el navegador lo muestre como texto y no lo interprete como HTML
+function mostrarSaludo(primerNombre) {
+    const titulo = document.getElementById('saludoTurno');
+    const nombre = document.createElement('span');
+    nombre.className = 'cancelar-card__nombre';
+    nombre.textContent = primerNombre;
+
+    titulo.textContent = 'Hola, ';
+    titulo.append(nombre);
+}
+
+// "2026-10-10" -> "Sábado 10 de octubre"
+function formatearFecha(fecha) {
+    const texto = new Date(fecha + 'T00:00:00')
+        .toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })
+        .replace(',', '');
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 // Estado inicial: un solo botón. Todavía no se borra nada.
