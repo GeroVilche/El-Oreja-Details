@@ -56,7 +56,45 @@ async function actualizarHorariosDisponibles() {
     }
 }
 
-inputFecha.addEventListener('change', actualizarHorariosDisponibles); inputFecha.addEventListener('change', actualizarCalendarioVisual);
+// FECHAS
+// Date -> "AAAA-MM-DD" (el formato que usa el <input type="date">), con la hora LOCAL del usuario.
+// Ojo: NO usar fecha.toISOString(): devuelve la fecha en UTC, y en Argentina (UTC-3)
+// a partir de las 21:00 ya daría el día siguiente.
+function formatearFechaISO(fecha) {
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    return `${año}-${mes}-${dia}`;
+}
+
+// Regla del negocio: los turnos se reservan con al menos 1 día de anticipación (desde mañana),
+// así Santi revisa la agenda del día siguiente y no le caen turnos nuevos sobre la marcha.
+// Para permitir reservar en el día, cambiar a 0.
+const DIAS_DE_ANTICIPACION = 1;
+
+// Primer día que se puede reservar, en formato "AAAA-MM-DD"
+function primeraFechaReservable() {
+    const fecha = new Date();
+    fecha.setDate(fecha.getDate() + DIAS_DE_ANTICIPACION);
+    return formatearFechaISO(fecha);
+}
+
+// `min` bloquea en el selector del navegador los días que no se pueden reservar, y si igual
+// llega una fecha anterior (escrita a mano, o la página quedó abierta desde ayer) la corregimos.
+// Las fechas "AAAA-MM-DD" se pueden comparar como texto: el orden alfabético coincide con el cronológico.
+function aplicarLimiteDeFecha() {
+    const primeraFecha = primeraFechaReservable();
+    inputFecha.min = primeraFecha;
+
+    if (!inputFecha.value || inputFecha.value < primeraFecha) {
+        inputFecha.value = primeraFecha;
+    }
+}
+
+// El orden importa: primero se corrige la fecha, después se usan los datos de esa fecha
+inputFecha.addEventListener('change', aplicarLimiteDeFecha);
+inputFecha.addEventListener('change', actualizarHorariosDisponibles);
+inputFecha.addEventListener('change', actualizarCalendarioVisual);
 selectServicio.addEventListener('change', actualizarHorariosDisponibles);
 
 const formulario = document.querySelector('.booking-form');
@@ -181,6 +219,8 @@ async function actualizarCalendarioVisual() {
         return
     }
 
+    actualizarFlechas();
+
     const fechaObj = new Date(fecha + 'T00:00:00');
     diaLabel.textContent = fechaObj.toLocaleDateString('es-AR', {
         weekday: 'long', day: 'numeric', month: 'long',
@@ -217,13 +257,18 @@ function cambiarDia(delta) {
 
     const fechaActual = new Date(inputFecha.value + 'T00:00:00');
     fechaActual.setDate(fechaActual.getDate() + delta);
+    const nuevaFecha = formatearFechaISO(fechaActual);
 
-    const año = fechaActual.getFullYear();
-    const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
-    const dia = String(fechaActual.getDate()).padStart(2, '0');
-    inputFecha.value = `${año}-${mes}-${dia}`;
+    // Por las dudas (la flecha ya está desactivada): nunca ir antes del primer día reservable
+    if (nuevaFecha < primeraFechaReservable()) return;
 
+    inputFecha.value = nuevaFecha;
     inputFecha.dispatchEvent(new Event('change'));
+}
+
+// En el primer día reservable, la flecha "día anterior" no tiene a dónde ir
+function actualizarFlechas() {
+    botonDiaAnterior.disabled = inputFecha.value <= primeraFechaReservable();
 }
 
 botonDiaAnterior.addEventListener('click', () => cambiarDia(-1));
@@ -234,6 +279,7 @@ botonDiaSiguiente.addEventListener('click', () => cambiarDia(1));
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') return;
 
+    aplicarLimiteDeFecha(); // por si la página quedó abierta de un día para otro
     actualizarCalendarioVisual();
 
     // Los horarios del <select> solo importan si el formulario está a la vista
@@ -241,3 +287,9 @@ document.addEventListener('visibilitychange', () => {
         actualizarHorariosDisponibles();
     }
 });
+
+// AL CARGAR LA PÁGINA: arrancamos en el primer día que se puede reservar.
+// Va al final del archivo porque usa constantes (horasLabels, botonDiaAnterior, etc.) que se
+// declaran más arriba: si lo llamáramos antes de esas líneas, todavía no existirían.
+aplicarLimiteDeFecha();
+actualizarCalendarioVisual();

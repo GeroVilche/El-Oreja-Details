@@ -40,6 +40,16 @@
     border-color: var(--color-accent);
 }
 
+/* Flecha "día anterior" en el primer día reservable: no se puede ir más atrás */
+.day-schedule__nav:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.day-schedule__nav:disabled:hover {
+    border-color: var(--color-border);
+}
+
 .day-schedule__date {
     font-family: var(--font-utility);
     font-size: var(--fs-small);
