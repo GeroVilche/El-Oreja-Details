@@ -79,18 +79,61 @@ formulario.addEventListener('submit', async (evento) => {
         }
 
         actualizarCalendarioVisual();
-
-        formulario.innerHTML = `
-            <h3>¡Turno reservado! 🎉</h3>
-            <p>Guardá este link por si necesitás cancelar tu turno más adelante:</p>
-            <p><a href="${datos.linkCancelacion}" target="_blank" rel="noopener">${datos.linkCancelacion}</a></p>
-            <a href="${datos.linkWhatsApp}" class="btn btn--primary btn--block" id="btnIrWhatsapp">Continuar a WhatsApp</a>
-        `;
+        mostrarReservaExitosa(datosTurno, datos);
 
     }   catch (error) {
         console.error(error);
         alert('No se pudo conectar con el servidor. ¿Está corriendo el backend?');
     }
+});
+
+// PANEL DE RESERVA EXITOSA
+// Antes se hacía formulario.innerHTML = ..., y eso DESTRUÍA el formulario (había que recargar
+// para reservar otro turno). Ahora el formulario solo se oculta y se muestra este panel aparte.
+const panelExito = document.getElementById('reservaExito');
+const tituloExito = document.getElementById('reservaExitoTitulo');
+const resumenReserva = document.getElementById('reservaResumen');
+const btnIrWhatsapp = document.getElementById('btnIrWhatsapp');
+const btnVerTurno = document.getElementById('btnVerTurno');
+const btnOtroTurno = document.getElementById('btnOtroTurno');
+
+// "2026-10-10" -> "sábado 10 de octubre"
+function formatearFechaLarga(fecha) {
+    return new Date(fecha + 'T00:00:00')
+        .toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })
+        .replace(',', '');
+}
+
+function mostrarReservaExitosa(datosTurno, respuestaBackend) {
+    resumenReserva.textContent =
+        `${datosTurno.servicio}, el ${formatearFechaLarga(datosTurno.fecha)} a las ${datosTurno.horaInicio}.`;
+
+    btnIrWhatsapp.href = respuestaBackend.linkWhatsApp;
+    btnVerTurno.href = respuestaBackend.linkCancelacion;
+
+    formulario.hidden = true;
+    panelExito.hidden = false;
+
+    // En el celular el formulario es largo: llevamos la vista al panel y le damos el foco
+    // (así un lector de pantalla también anuncia "¡Turno reservado!")
+    panelExito.scrollIntoView({ block: 'nearest' });
+    tituloExito.focus({ preventScroll: true });
+}
+
+// "Reservar otro turno": vuelve el formulario. Mantenemos nombre, teléfono y fecha
+// (lo más probable es que sea la misma persona) y limpiamos el resto.
+btnOtroTurno.addEventListener('click', () => {
+    selectServicio.value = '';
+    document.getElementById('vehiculo').value = '';
+    document.getElementById('comentario').value = '';
+    selectHora.innerHTML = '<option value="" selected disabled>Elegí fecha y servicio primero</option>';
+
+    panelExito.hidden = true;
+    formulario.hidden = false;
+
+    actualizarCalendarioVisual();
+    formulario.scrollIntoView({ block: 'nearest' });
+    selectServicio.focus({ preventScroll: true });
 });
 
 // CALENDARIO VISUAL

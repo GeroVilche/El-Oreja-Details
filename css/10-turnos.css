@@ -64,6 +64,60 @@
   min-width: 0;
 }
 
+/* El atributo hidden pone display: none, pero cualquier regla de CSS con display
+   (como el display: grid de arriba) le gana. Esto lo vuelve a hacer valer. */
+.booking-form[hidden],
+.booking-exito[hidden] {
+  display: none;
+}
+
+/* Panel que aparece después de reservar */
+.booking-exito {
+  display: grid;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+/* El header es fixed: al hacer scrollIntoView, dejamos ese espacio libre arriba
+   para que el header no tape el título del panel ni el formulario */
+.booking-exito,
+.booking-form {
+  scroll-margin-top: calc(var(--header-height) + var(--space-sm));
+}
+
+.booking-exito__titulo:focus {
+  outline: none; /* el foco es solo para lectores de pantalla, no hace falta el recuadro */
+}
+
+.booking-exito__resumen {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.booking-exito__acciones {
+  display: grid;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.booking-exito__acciones .btn {
+  white-space: normal; /* que el texto pueda bajar de línea en pantallas angostas */
+  text-align: center;
+}
+
+/* Tercera opción, menos importante: va como link de texto y no como otro botón */
+.booking-exito__otro {
+  justify-self: center;
+  padding: var(--space-xs);
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.booking-exito__otro:hover {
+  color: var(--color-text);
+}
+
 .booking-form__submit {
   margin-top: var(--space-xs);
   white-space: normal;

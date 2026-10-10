@@ -357,6 +357,18 @@
           </button>
         </form>
 
+        <!-- Panel que reemplaza al formulario después de reservar (se muestra desde js/turnos.js) -->
+        <div class="card booking-exito" id="reservaExito" hidden>
+          <h3 class="booking-exito__titulo" id="reservaExitoTitulo" tabindex="-1">¡Turno reservado!</h3>
+          <p class="booking-exito__resumen" id="reservaResumen"></p>
+          <p>Último paso: enviá el mensaje por WhatsApp. Ahí también te queda guardado el link para ver o cancelar tu turno.</p>
+          <div class="booking-exito__acciones">
+            <a href="#" class="btn btn--primary btn--block" id="btnIrWhatsapp">Enviar por WhatsApp</a>
+            <a href="#" class="btn btn--ghost btn--block" id="btnVerTurno" target="_blank" rel="noopener">Ver o cancelar mi turno</a>
+          </div>
+          <button type="button" class="booking-exito__otro" id="btnOtroTurno">Reservar otro turno</button>
+        </div>
+
       </div>
     </section>
 
