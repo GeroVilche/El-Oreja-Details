@@ -20,6 +20,9 @@ async function actualizarHorariosDisponibles() {
         return;
     }
 
+    // Guardamos el horario que ya estaba elegido, para no perderlo al recargar la lista
+    const horaElegida = selectHora.value;
+
     // Mientras esperamos la respuesta, mostramos un mensaje de carga
     selectHora.innerHTML = '<option value="" selected disabled>Cargando horarios...</option>';
 
@@ -41,6 +44,11 @@ async function actualizarHorariosDisponibles() {
             opcion.textContent = hora;
             selectHora.appendChild(opcion);
         });
+
+        // Si el horario que tenía elegido sigue libre, lo dejamos seleccionado
+        if (datos.horariosDisponibles.includes(horaElegida)) {
+            selectHora.value = horaElegida;
+        }
 
     } catch (error) {
     console.error(error);
@@ -220,3 +228,16 @@ function cambiarDia(delta) {
 
 botonDiaAnterior.addEventListener('click', () => cambiarDia(-1));
 botonDiaSiguiente.addEventListener('click', () => cambiarDia(1));
+
+// Al volver a esta pestaña (por ej. después de cancelar un turno en otra pestaña, o si
+// otra persona reservó mientras tanto), recargamos los datos para no mostrar información vieja
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+
+    actualizarCalendarioVisual();
+
+    // Los horarios del <select> solo importan si el formulario está a la vista
+    if (!formulario.hidden) {
+        actualizarHorariosDisponibles();
+    }
+});
