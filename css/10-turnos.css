@@ -118,6 +118,20 @@
   color: var(--color-text);
 }
 
+/* Mensaje de error del formulario */
+.booking-form__error {
+  padding: var(--space-xs) var(--space-sm);
+  border-left: 3px solid var(--color-error);
+  background-color: var(--color-error-soft);
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.booking-form__submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 .booking-form__submit {
   margin-top: var(--space-xs);
   white-space: normal;

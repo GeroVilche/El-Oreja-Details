@@ -38,6 +38,8 @@
 
   /* Utilidad */
   --color-success: #4caf6d;
+  --color-error: #e5806f;
+  --color-error-soft: rgba(229, 128, 111, 0.1);
   --color-focus: #6fb8ff;
 
   /* --------------------------------------------------------------------

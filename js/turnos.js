@@ -114,8 +114,32 @@ selectServicio.addEventListener('change', actualizarHorariosDisponibles);
 
 const formulario = document.querySelector('.booking-form');
 
+// MENSAJES DE ERROR DEL FORMULARIO (reemplazan a los alert() del navegador)
+const mensajeError = document.getElementById('formError');
+const botonReservar = formulario.querySelector('.booking-form__submit');
+const TEXTO_BOTON_RESERVAR = botonReservar.textContent.trim();
+
+function mostrarErrorFormulario(texto) {
+    mensajeError.textContent = texto; // textContent: el texto viene del backend, nunca como HTML
+    mensajeError.hidden = false;
+    mensajeError.scrollIntoView({ block: 'nearest' });
+}
+
+function ocultarErrorFormulario() {
+    mensajeError.hidden = true;
+}
+
+// Apenas el usuario cambia algo para corregir, el error viejo deja de tener sentido
+formulario.addEventListener('input', ocultarErrorFormulario);
+formulario.addEventListener('change', ocultarErrorFormulario);
+
 formulario.addEventListener('submit', async (evento) => {
     evento.preventDefault();
+    ocultarErrorFormulario();
+
+    // Desactivamos el botón mientras se reserva: un doble clic no puede mandar dos reservas
+    botonReservar.disabled = true;
+    botonReservar.textContent = 'Reservando...';
 
     const datosTurno = {
         fecha: inputFecha.value,
@@ -137,7 +161,14 @@ formulario.addEventListener('submit', async (evento) => {
         const datos = await respuesta.json();
 
         if (!respuesta.ok) {
-            alert(datos.error || 'Hubo un error al reservar el turno');
+            mostrarErrorFormulario(datos.error || 'No se pudo reservar el turno. Revisá los datos y probá de nuevo.');
+
+            // 409 = alguien reservó ese horario mientras el usuario completaba el formulario:
+            // recargamos los horarios para que elija otro de los que siguen libres
+            if (respuesta.status === 409) {
+                actualizarHorariosDisponibles();
+                actualizarCalendarioVisual();
+            }
             return;
         }
 
@@ -146,7 +177,11 @@ formulario.addEventListener('submit', async (evento) => {
 
     }   catch (error) {
         console.error(error);
-        alert('No se pudo conectar con el servidor. ¿Está corriendo el backend?');
+        mostrarErrorFormulario('No pudimos conectarnos con el sistema de turnos. Probá de nuevo en unos minutos o escribinos por WhatsApp.');
+    } finally {
+        // finally se ejecuta siempre (salga bien, mal o con error): el botón vuelve a la normalidad
+        botonReservar.disabled = false;
+        botonReservar.textContent = TEXTO_BOTON_RESERVAR;
     }
 });
 
