@@ -123,6 +123,8 @@ formulario.addEventListener('submit', async (evento) => {
         servicio: selectServicio.value,
         clienteNombre: document.getElementById('nombre').value,
         clienteTelefono: document.getElementById('telefono').value,
+        vehiculo: document.getElementById('vehiculo').value,
+        comentario: document.getElementById('comentario').value,
     };
 
     try {
