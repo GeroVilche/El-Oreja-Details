@@ -71,12 +71,23 @@ function formatearFechaISO(fecha) {
 // así Santi revisa la agenda del día siguiente y no le caen turnos nuevos sobre la marcha.
 // Para permitir reservar en el día, cambiar a 0.
 const DIAS_DE_ANTICIPACION = 1;
+// Y como máximo hasta 60 días adelante (el backend aplica las mismas dos reglas)
+const DIAS_MAXIMOS_DE_ANTICIPACION = 60;
 
-// Primer día que se puede reservar, en formato "AAAA-MM-DD"
-function primeraFechaReservable() {
+// Fecha "AAAA-MM-DD" de dentro de N días
+function fechaDentroDeDias(dias) {
     const fecha = new Date();
-    fecha.setDate(fecha.getDate() + DIAS_DE_ANTICIPACION);
+    fecha.setDate(fecha.getDate() + dias);
     return formatearFechaISO(fecha);
+}
+
+// Primer y último día que se pueden reservar
+function primeraFechaReservable() {
+    return fechaDentroDeDias(DIAS_DE_ANTICIPACION);
+}
+
+function ultimaFechaReservable() {
+    return fechaDentroDeDias(DIAS_MAXIMOS_DE_ANTICIPACION);
 }
 
 // `min` bloquea en el selector del navegador los días que no se pueden reservar, y si igual
@@ -84,10 +95,14 @@ function primeraFechaReservable() {
 // Las fechas "AAAA-MM-DD" se pueden comparar como texto: el orden alfabético coincide con el cronológico.
 function aplicarLimiteDeFecha() {
     const primeraFecha = primeraFechaReservable();
+    const ultimaFecha = ultimaFechaReservable();
     inputFecha.min = primeraFecha;
+    inputFecha.max = ultimaFecha;
 
     if (!inputFecha.value || inputFecha.value < primeraFecha) {
         inputFecha.value = primeraFecha;
+    } else if (inputFecha.value > ultimaFecha) {
+        inputFecha.value = ultimaFecha;
     }
 }
 
@@ -259,16 +274,17 @@ function cambiarDia(delta) {
     fechaActual.setDate(fechaActual.getDate() + delta);
     const nuevaFecha = formatearFechaISO(fechaActual);
 
-    // Por las dudas (la flecha ya está desactivada): nunca ir antes del primer día reservable
-    if (nuevaFecha < primeraFechaReservable()) return;
+    // Por las dudas (las flechas ya se desactivan): nunca salir del rango reservable
+    if (nuevaFecha < primeraFechaReservable() || nuevaFecha > ultimaFechaReservable()) return;
 
     inputFecha.value = nuevaFecha;
     inputFecha.dispatchEvent(new Event('change'));
 }
 
-// En el primer día reservable, la flecha "día anterior" no tiene a dónde ir
+// En el primer/último día reservable, las flechas no tienen a dónde ir
 function actualizarFlechas() {
     botonDiaAnterior.disabled = inputFecha.value <= primeraFechaReservable();
+    botonDiaSiguiente.disabled = inputFecha.value >= ultimaFechaReservable();
 }
 
 botonDiaAnterior.addEventListener('click', () => cambiarDia(-1));
