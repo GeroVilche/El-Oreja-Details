@@ -1,10 +1,3 @@
-window.addEventListener('load', () => {
-  console.log('Ancho de contenido:', document.documentElement.scrollWidth);
-  console.log('Ancho de pantalla:', document.documentElement.clientWidth);
-});
-
-
-
 const inputFecha = document.getElementById('fecha');
 const selectServicio = document.getElementById('servicio');
 const selectHora = document.getElementById('hora');
