@@ -13,6 +13,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  min-width: 0; /* que la tarjeta pueda achicarse dentro de la grilla */
   transition: transform var(--transition-fast), background var(--transition-fast);
 }
 
@@ -67,6 +68,13 @@
   color: var(--color-text);
 }
 
+/* .btn tiene white-space: nowrap; con 3 columnas angostas, "Reservar este plan" no entraba
+   y empujaba la tarjeta afuera de la pantalla. Acá dejo que el texto baje de línea. */
+.plan-card .btn {
+  white-space: normal;
+  text-align: center;
+}
+
 .plan-card__features svg {
   width: 16px;
   height: 16px;
@@ -77,13 +85,13 @@
 
 @media (min-width: 700px) {
   .plans {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1000px) {
   .plans {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
  .plan-card__image {

@@ -159,3 +159,16 @@
   resize: vertical;
   min-height: 90px;
 }
+
+/* Autocompletado del navegador: Chrome/Edge pintan de celeste los campos que completan solos
+   y eso rompe el diseño oscuro. No dejan cambiar ese fondo directamente, así que lo tapo con
+   una sombra interna del color del input y fuerzo el color del texto. */
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus,
+.field textarea:-webkit-autofill,
+.field select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-bg) inset;
+  -webkit-text-fill-color: var(--color-text);
+  caret-color: var(--color-text);
+}

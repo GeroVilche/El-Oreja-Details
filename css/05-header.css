@@ -29,6 +29,8 @@
   display: flex;
   align-items: baseline;
   gap: 0.35rem;
+  flex-shrink: 0;      /* que el logo no se achique cuando falta espacio... */
+  white-space: nowrap; /* ...ni se parta en dos líneas */
   font-family: var(--font-display);
   font-size: 1.3rem;
   letter-spacing: 0.02em;
@@ -46,10 +48,15 @@
 .nav__list {
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
+/* inline-block + padding: toda la caja del link es clickeable (antes, si el texto bajaba
+   a dos líneas, el espacio entre las líneas no respondía al mouse) */
 .nav__link {
+  display: inline-block;
+  padding-block: 0.5rem;
+  white-space: nowrap;
   font-size: var(--fs-small);
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -74,9 +81,17 @@
   display: none;
 }
 
+/* Desde 860px se muestra el menú. Entre 860 y 1100px el espacio es justo, así que el botón
+   de WhatsApp sigue mostrando solo el ícono; desde 1100px ya entra todo con su texto. */
 @media (min-width: 860px) {
   .nav {
     display: block;
+  }
+}
+
+@media (min-width: 1100px) {
+  .nav__list {
+    gap: var(--space-lg);
   }
 
   .header__actions .btn--whatsapp .btn__label {
