@@ -41,21 +41,74 @@
   color: var(--color-accent);
 }
 
+/* --------------------------------------------------------------------------
+   MENÚ
+   Mobile primero: en celulares y tablets (menos de 860px) el header muestra solo el logo
+   y el botón hamburguesa. Al tocarlo, js/menu.js le agrega la clase .header--menu-abierto
+   al header y el menú se despliega debajo, con los links uno abajo del otro y WhatsApp al final.
+   Desde 860px el menú vuelve a ser la fila de links de siempre y el botón desaparece.
+   -------------------------------------------------------------------------- */
+
+/* Botón hamburguesa: tres rayitas que se convierten en una X cuando el menú está abierto */
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;  /* 44px: tamaño mínimo cómodo para tocar con el dedo */
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.nav-toggle__linea {
+  display: block;
+  height: 2px;
+  background-color: var(--color-text);
+  border-radius: 2px;
+  transition: transform var(--transition-base), opacity var(--transition-fast);
+}
+
+.header--menu-abierto .nav-toggle__linea:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.header--menu-abierto .nav-toggle__linea:nth-child(2) {
+  opacity: 0;
+}
+
+.header--menu-abierto .nav-toggle__linea:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* El menú en mobile: oculto hasta que se abre, y cuando se abre aparece pegado
+   debajo del header (el header es fixed, así que "absolute" se ubica respecto a él) */
 .nav {
   display: none;
 }
 
-.nav__list {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
+.header--menu-abierto .nav {
+  display: block;
+  position: absolute;
+  top: var(--header-height);
+  inset-inline: 0;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border-soft);
+  padding-bottom: var(--space-md);
 }
 
-/* inline-block + padding: toda la caja del link es clickeable (antes, si el texto bajaba
-   a dos líneas, el espacio entre las líneas no respondía al mouse) */
+.nav__list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* inline-block / block + padding: toda la caja del link es clickeable (antes, si el texto
+   bajaba a dos líneas, el espacio entre las líneas no respondía al mouse) */
 .nav__link {
-  display: inline-block;
-  padding-block: 0.5rem;
+  display: block;
+  padding: 1rem var(--content-padding);
+  border-top: 1px solid var(--color-border-soft);
   white-space: nowrap;
   font-size: var(--fs-small);
   font-weight: 600;
@@ -69,26 +122,57 @@
   color: var(--color-text);
 }
 
-.header__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
+/* WhatsApp dentro del menú mobile: un botón al final de la lista */
+.nav__item--whatsapp {
+  padding: var(--space-md) var(--content-padding) 0;
 }
 
-/* En mobile ocultamos el texto del botón de WhatsApp del header y dejamos
-   sólo el ícono, para no competir con el CTA principal del hero */
-.header__actions .btn--whatsapp .btn__label {
+/* En mobile, el WhatsApp del header se esconde (vive dentro del menú) */
+.header__actions {
   display: none;
 }
 
-/* Desde 860px se muestra el menú. Entre 860 y 1100px el espacio es justo, así que el botón
-   de WhatsApp sigue mostrando solo el ícono; desde 1100px ya entra todo con su texto. */
 @media (min-width: 860px) {
-  .nav {
+  /* Desde acá el menú es la fila de links normal: chau hamburguesa */
+  .nav-toggle,
+  .nav__item--whatsapp {
+    display: none;
+  }
+
+  .nav,
+  .header--menu-abierto .nav {
     display: block;
+    position: static;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .nav__list {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .nav__link {
+    display: inline-block;
+    padding: 0.5rem 0;
+    border-top: 0;
+  }
+
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  /* Entre 860 y 1100px el espacio es justo: el botón de WhatsApp muestra solo el ícono */
+  .header__actions .btn--whatsapp .btn__label {
+    display: none;
   }
 }
 
+/* Desde 1100px entra todo, con el texto "WhatsApp" incluido */
 @media (min-width: 1100px) {
   .nav__list {
     gap: var(--space-lg);
