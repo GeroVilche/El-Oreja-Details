@@ -1,8 +1,8 @@
 /* ==========================================================================
    TURNOS.CSS
-   Formulario de reserva de turnos. Hoy arma un link de WhatsApp estático;
-   cuando se sume JS, el botón va a construir el mensaje dinámicamente con
-   los datos cargados (ver comentario TODO en index.html).
+   Sección de reservas: el formulario, el recuadro de errores y el panel
+   que aparece después de reservar. El calendario visual de la izquierda
+   tiene su propio archivo (15-day-schedule.css).
    ========================================================================== */
 
 .booking {

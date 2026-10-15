@@ -6,7 +6,8 @@
   <title>El Oreja Details | Detailing y lavado de vehículos</title>
   <meta name="description" content="Lavado y detailing profesional de vehículos. Reservá tu turno online y confirmalo al instante por WhatsApp." />
 
-  <!-- Tipografías: Oswald (títulos), Manrope (texto), Bebas Neue (etiquetas/números) -->
+  <!-- Tipografías: Space Grotesk (títulos), Manrope (texto) y Lexend (botones, etiquetas y números).
+       Si las cambio, también tengo que actualizar las variables --font-* en css/01-variables.css -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;700;800&family=Lexend:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -278,14 +279,13 @@
         </div>
 
         <!--
-          TODO (próxima etapa, con JS):
-          1. Prevenir el submit por defecto del formulario.
-          2. Tomar los valores de #nombre, #telefono, #servicio, #fecha, #hora y #comentario.
-          3. Armar un mensaje de texto con esos datos (usando encodeURIComponent).
-          4. Redirigir a `https://wa.me/5490000000000?text=` + mensaje codificado
-             (window.open o cambiando window.location).
-          Por ahora el botón linkea a un mensaje fijo de ejemplo para poder
-          ver el flujo funcionando de punta a punta.
+          FORMULARIO DE RESERVA
+          La lógica está en js/turnos.js: cuando se envía, freno el submit normal,
+          mando los datos al backend (POST /turnos) y, si sale bien, oculto el
+          formulario y muestro el panel de "¡Turno reservado!" con el link de WhatsApp.
+          Los horarios del <select> los cargo del backend según la fecha y el servicio.
+          Ojo: las validaciones de acá (required, pattern) son solo una ayuda para el
+          usuario; las que valen de verdad están en el backend.
         -->
         <form class="card booking-form" action="#" method="get">
           <div class="booking-form__row">
@@ -351,7 +351,6 @@
             <textarea id="comentario" name="comentario" maxlength="300" placeholder="Alguna aclaración sobre el vehículo o el horario"></textarea>
           </div>
 
-          <!-- Placeholder: enlace fijo hasta que se conecte la lógica en JS -->
           <!-- Mensaje de error del formulario (lo muestra js/turnos.js). role="alert": los lectores de pantalla lo anuncian -->
           <p class="booking-form__error" id="formError" role="alert" hidden></p>
 
