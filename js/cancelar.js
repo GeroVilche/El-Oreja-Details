@@ -26,16 +26,21 @@ async function cargarTurno() {
 
         const turno = await respuesta.json();
 
+        // La estructura va con innerHTML (es texto fijo, escrito por nosotros) y los datos que
+        // vienen de la API se ponen después con textContent: así nunca se interpretan como HTML
         cancelarCard.innerHTML = `
             <h1 class="cancelar-card__titulo" id="saludoTurno">Tu turno</h1>
             <p class="cancelar-card__subtitulo">Estos son los datos de tu turno.</p>
             <div class="cancelar-card__turno">
-                <p class="cancelar-card__dia">${formatearFecha(turno.fecha)}</p>
-                <p class="cancelar-card__hora">${turno.horaInicio} – ${turno.horaFin}</p>
-                <p class="cancelar-card__servicio">${turno.servicio || 'Servicio no especificado'}</p>
+                <p class="cancelar-card__dia"></p>
+                <p class="cancelar-card__hora"></p>
+                <p class="cancelar-card__servicio"></p>
             </div>
             <div class="cancelar-card__acciones" id="accionesTurno"></div>
         `;
+        cancelarCard.querySelector('.cancelar-card__dia').textContent = formatearFecha(turno.fecha);
+        cancelarCard.querySelector('.cancelar-card__hora').textContent = `${turno.horaInicio} – ${turno.horaFin}`;
+        cancelarCard.querySelector('.cancelar-card__servicio').textContent = turno.servicio || 'Servicio no especificado';
 
         if (turno.primerNombre) {
             mostrarSaludo(turno.primerNombre);
