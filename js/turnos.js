@@ -2,8 +2,6 @@ const inputFecha = document.getElementById('fecha');
 const selectServicio = document.getElementById('servicio');
 const selectHora = document.getElementById('hora');
 
-const API_URL = 'http://localhost:3000';
-
 async function actualizarHorariosDisponibles() {
     const fecha = inputFecha.value;
     const servicio = selectServicio.value;

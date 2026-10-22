@@ -1,4 +1,3 @@
-const API_URL = 'http://localhost:3000';
 const cancelarCard = document.getElementById('cancelarCard');
 const PAGINA_INICIO = 'index.html';
 const SEGUNDOS_REDIRECCION = 10;
