@@ -355,19 +355,15 @@
             <div class="field">
               <label for="servicio">Servicio</label>
               <select id="servicio" name="servicio" required>
-                <option value="" selected disabled>Elegí un plan</option>
-                <option value="Lavado de Mantenimiento">Lavado de Mantenimiento</option>
-                <option value="Lavado Completo">Lavado Completo</option>
-                <option value="Detailing a Fondo">Detailing a Fondo</option>
+                <!-- Las opciones las carga js/turnos.js desde el backend (GET /configuracion) -->
+                <option value="" selected disabled>Cargando servicios...</option>
               </select>
             </div>
             <div class="field">
               <label for="vehiculo">Tipo de vehículo</label>
               <select id="vehiculo" name="vehiculo" required>
-                <option value="" selected disabled>Elegí una opción</option>
-                <option value="Auto">Auto</option>
-                <option value="Camioneta / SUV">Camioneta / SUV</option>
-                <option value="Moto">Moto</option>
+                <!-- Las opciones las carga js/turnos.js desde el backend (GET /configuracion) -->
+                <option value="" selected disabled>Cargando opciones...</option>
               </select>
             </div>
           </div>

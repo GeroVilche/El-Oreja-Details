@@ -2,6 +2,48 @@ const inputFecha = document.getElementById('fecha');
 const selectServicio = document.getElementById('servicio');
 const selectHora = document.getElementById('hora');
 
+
+// CONFIGURACIÓN DEL NEGOCIO
+// Los servicios, vehículos, horario y anticipación no están escritos acá: los pido al backend
+// (GET /configuracion), que los lee de config/negocio.js. Si cambia algo del negocio, se cambia allá.
+// Ojo: hasta que llega la respuesta, configuracion vale null.
+let configuracion = null;
+
+const selectVehiculo = document.getElementById('vehiculo');
+
+// Reemplazo las opciones de un <select> por las de la lista que le paso, con la opción
+// "Elegí..." primero (vacía y deshabilitada, para que el required obligue a elegir otra).
+function llenarSelect(select, textoInicial, opciones) {
+    select.innerHTML = '';
+
+    const opcionInicial = document.createElement('option');
+    opcionInicial.value = '';
+    opcionInicial.textContent = textoInicial;
+    opcionInicial.disabled = true;
+    opcionInicial.selected = true;
+    select.appendChild(opcionInicial);
+
+    opciones.forEach(texto => {
+        const opcion = document.createElement('option');
+        opcion.value = texto;
+        opcion.textContent = texto; // textContent: el texto viene de la API, nunca como HTML
+        select.appendChild(opcion);
+    });
+}
+
+async function cargarConfiguracion() {
+    const respuesta = await fetch(`${API_URL}/configuracion`);
+    if (!respuesta.ok) {
+        throw new Error(`GET /configuracion respondió ${respuesta.status}`);
+    }
+    configuracion = await respuesta.json();
+
+    // De cada servicio ({ nombre, duracion }) el <select> solo necesita el nombre
+    const nombresDeServicios = configuracion.servicios.map(servicio => servicio.nombre);
+    llenarSelect(selectServicio, 'Elegí un plan', nombresDeServicios);
+    llenarSelect(selectVehiculo, 'Elegí una opción', configuracion.vehiculos);
+}
+
 async function actualizarHorariosDisponibles() {
     const fecha = inputFecha.value;
     const servicio = selectServicio.value;
@@ -335,5 +377,19 @@ document.addEventListener('visibilitychange', () => {
 // AL CARGAR LA PÁGINA: arrancamos en el primer día que se puede reservar.
 // Va al final del archivo porque usa constantes (horasLabels, botonDiaAnterior, etc.) que se
 // declaran más arriba: si lo llamáramos antes de esas líneas, todavía no existirían.
-aplicarLimiteDeFecha();
-actualizarCalendarioVisual();
+async function iniciar() {
+    try {
+        await cargarConfiguracion();
+    } catch (error) {
+        console.error(error);
+        // Sin la config no puedo armar el formulario: aviso y desactivo el botón para que no intente reservar
+        mostrarErrorFormulario('No pudimos cargar el sistema de turnos. Recargá la página en unos minutos o escribinos por WhatsApp.');
+        botonReservar.disabled = true;
+        return;
+    }
+
+    aplicarLimiteDeFecha();
+    actualizarCalendarioVisual();
+}
+
+iniciar();
