@@ -100,13 +100,6 @@ function formatearFechaISO(fecha) {
     return `${año}-${mes}-${dia}`;
 }
 
-// Regla del negocio: los turnos se reservan con al menos 1 día de anticipación (desde mañana),
-// así Santi revisa la agenda del día siguiente y no le caen turnos nuevos sobre la marcha.
-// Para permitir reservar en el día, cambiar a 0.
-const DIAS_DE_ANTICIPACION = 1;
-// Y como máximo hasta 60 días adelante (el backend aplica las mismas dos reglas)
-const DIAS_MAXIMOS_DE_ANTICIPACION = 60;
-
 // Fecha "AAAA-MM-DD" de dentro de N días
 function fechaDentroDeDias(dias) {
     const fecha = new Date();
@@ -114,19 +107,22 @@ function fechaDentroDeDias(dias) {
     return formatearFechaISO(fecha);
 }
 
-// Primer y último día que se pueden reservar
+// Primer y último día que se pueden reservar, según la anticipación de config/negocio.js
+// (minimaDias: 1 = desde mañana; maximaDias: hasta cuántos días adelante)
 function primeraFechaReservable() {
-    return fechaDentroDeDias(DIAS_DE_ANTICIPACION);
+    return fechaDentroDeDias(configuracion.anticipacion.minimaDias);
 }
 
 function ultimaFechaReservable() {
-    return fechaDentroDeDias(DIAS_MAXIMOS_DE_ANTICIPACION);
+    return fechaDentroDeDias(configuracion.anticipacion.maximaDias);
 }
 
 // `min` bloquea en el selector del navegador los días que no se pueden reservar, y si igual
 // llega una fecha anterior (escrita a mano, o la página quedó abierta desde ayer) la corregimos.
 // Las fechas "AAAA-MM-DD" se pueden comparar como texto: el orden alfabético coincide con el cronológico.
 function aplicarLimiteDeFecha() {
+    if (!configuracion) return; // la config todavía no llegó (ver iniciar())
+    
     const primeraFecha = primeraFechaReservable();
     const ultimaFecha = ultimaFechaReservable();
     inputFecha.min = primeraFecha;
@@ -268,8 +264,6 @@ btnOtroTurno.addEventListener('click', () => {
 });
 
 // CALENDARIO VISUAL
-const HORA_INICIO_CALENDARIO = 9;    // 9:00, coincide con el horario de apertura
-const HORA_FIN_CALENDARIO = 18;     // 18:00, coincide con el cierre
 const ALTO_POR_HORA_PX = 36;       // 2.25rem = 36px (asumiendo 1rem = 16px)
 
 const horasLabels = document.getElementById('horasLabels');
@@ -281,11 +275,23 @@ function horaAMinutosFrontend(hora) {
     return horas * 60 + minutos;
 }
 
+// Primera y última hora que dibuja el calendario, según el horario de config/negocio.js
+// Ojo: el calendario va por filas de 1 hora. Si el negocio abre o cierra a media hora,
+// redondeo para que entre todo: abre 09:30 -> arranca en la fila de las 9 (floor), 
+//cierra 18:30 -> termina después de la fila de las 18 (ceil).
+function horaInicioCalendario() {
+    return Math.floor(horaAMinutosFrontend(configuracion.horario.apertura) / 60);
+}
+
+function horaFinCalendario() {
+    return Math.ceil(horaAMinutosFrontend(configuracion.horario.cierre) / 60);
+}
+
 function dibujarFranjasHorarias() {
     horasLabels.innerHTML = '';
     turnosTrack.innerHTML = '';
 
-    for (let h = HORA_INICIO_CALENDARIO; h < HORA_FIN_CALENDARIO; h++) {
+    for (let h = horaInicioCalendario(); h < horaFinCalendario(); h++) {
         const etiqueta = document.createElement('span');
         etiqueta.textContent = String(h).padStart(2, '0');
         horasLabels.appendChild(etiqueta);
@@ -297,6 +303,8 @@ function dibujarFranjasHorarias() {
 }
 
 async function actualizarCalendarioVisual() {
+    if (!configuracion) return; // la config todavía no llegó (ver iniciar())
+    
     const fecha = inputFecha.value;
 
     if (!fecha) {
@@ -318,8 +326,9 @@ async function actualizarCalendarioVisual() {
         const turnosDelDia = await respuesta.json();
 
         turnosDelDia.forEach(turno => {
-            const inicioMin = horaAMinutosFrontend(turno.horaInicio) - HORA_INICIO_CALENDARIO * 60;
-            const finMin = horaAMinutosFrontend(turno.horaFin) - HORA_INICIO_CALENDARIO * 60;
+            // Minutos desde la primera fila del calendario (de ahí sale la posición del bloque)
+            const inicioMin = horaAMinutosFrontend(turno.horaInicio) - horaInicioCalendario() * 60;
+            const finMin = horaAMinutosFrontend(turno.horaFin) - horaInicioCalendario() * 60;
 
             const bloque = document.createElement('div');
             bloque.className = 'day-schedule__block';
@@ -338,6 +347,7 @@ const botonDiaAnterior = document.getElementById('diaAnterior');
 const botonDiaSiguiente = document.getElementById('diaSiguiente');
 
 function cambiarDia(delta) {
+    if (!configuracion) return; // la config todavía no llegó (ver iniciar())
     if (!inputFecha.value) return;
 
     const fechaActual = new Date(inputFecha.value + 'T00:00:00');
