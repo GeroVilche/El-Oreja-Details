@@ -136,3 +136,35 @@
   background-color: var(--color-bg);
   border: 1px solid var(--color-border);
 }
+
+/* Horas en que no se atiende ese día (antes de abrir, mediodía de un horario cortado,
+   después de cerrar, o el día entero si está cerrado). Las hago rayadas para que no
+   se confundan con "Ocupado". Ojo: este modificador va junto con .day-schedule__block,
+   que es el que da el position: absolute. */
+.day-schedule__block--cerrado {
+  background: repeating-linear-gradient(135deg, transparent 0 6px, var(--color-border-soft) 6px 9px);
+  border-left: none;
+}
+
+/* Cartel "Cerrado" centrado en el calendario los días que no se abre */
+.day-schedule__cerrado-texto {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  padding: 0.3rem 0.9rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-utility);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.day-schedule__swatch--closed {
+  background: repeating-linear-gradient(135deg, transparent 0 2px, var(--color-border) 2px 3px);
+  border: 1px solid var(--color-border);
+}
