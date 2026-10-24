@@ -63,6 +63,12 @@ async function actualizarHorariosDisponibles() {
         const url = `${API_URL}/disponibilidad?fecha=${fecha}&servicio=${encodeURIComponent(servicio)}`;
         const respuesta = await fetch(url);
         const datos = await respuesta.json();
+        
+        // Día cerrado: el backend lo avisa con "cerrado: true"
+        if (datos.cerrado) {
+            selectHora.innerHTML = '<option value="" selected disabled>Cerrado ese día</option>';
+            return;
+        }
 
         if (datos.horariosDisponibles.length === 0) {
             selectHora.innerHTML = '<option value="" selected disabled>No hay horarios disponibles ese día</option>';
@@ -100,6 +106,30 @@ function formatearFechaISO(fecha) {
     return `${año}-${mes}-${dia}`;
 }
 
+// Igual que en el backend: getUTCDay() da 0 = domingo... 6 = sábado, y esta lista lo traduce
+// al nombre que usa config/negocio.js. Armo la fecha con "Z" para que no dependa de la zona horaria.
+const DIAS_DE_LA_SEMANA = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+
+// Franjas de atención de una fecha "AAAA-MM-DD". [] = ese día está cerrado.
+function franjasDelDia(fecha) {
+    const numeroDeDia = new Date(`${fecha}T00:00:00Z`).getUTCDay();
+    return configuracion.horarios[DIAS_DE_LA_SEMANA[numeroDeDia]];
+}
+
+// Desde una fecha, busco el primer día que se atiende (miro como mucho 7 días: una semana entera).
+// Si estuvieran todos cerrados, devuelvo la misma fecha (no debería pasar, pero así no queda en un bucle).
+function primerDiaAbiertoDesde(fecha) {
+    const dia = new Date(fecha + 'T00:00:00');
+    for (let i = 0; i < 7; i++) {
+        const candidata = formatearFechaISO(dia);
+        if (franjasDelDia(candidata).length > 0) {
+            return candidata;
+        }
+        dia.setDate(dia.getDate() + 1);
+    }
+    return fecha;
+}
+
 // Fecha "AAAA-MM-DD" de dentro de N días
 function fechaDentroDeDias(dias) {
     const fecha = new Date();
@@ -128,8 +158,10 @@ function aplicarLimiteDeFecha() {
     inputFecha.min = primeraFecha;
     inputFecha.max = ultimaFecha;
 
+    // Si no hay fecha elegida (o quedó vieja), arranco en el primer día que se atiende:
+    // si mañana es domingo, la página abre directo en el lunes
     if (!inputFecha.value || inputFecha.value < primeraFecha) {
-        inputFecha.value = primeraFecha;
+        inputFecha.value = primerDiaAbiertoDesde(primeraFecha);
     } else if (inputFecha.value > ultimaFecha) {
         inputFecha.value = ultimaFecha;
     }
@@ -275,16 +307,56 @@ function horaAMinutosFrontend(hora) {
     return horas * 60 + minutos;
 }
 
-// Primera y última hora que dibuja el calendario, según el horario de config/negocio.js
-// Ojo: el calendario va por filas de 1 hora. Si el negocio abre o cierra a media hora,
-// redondeo para que entre todo: abre 09:30 -> arranca en la fila de las 9 (floor), 
-//cierra 18:30 -> termina después de la fila de las 18 (ceil).
+// Todas las franjas de la semana juntas (Object.values da la lista de cada día y .flat() las une en una).
+function todasLasFranjas() {
+    return Object.values(configuracion.horarios).flat();
+}
+
+// El calendario va siempre desde la apertura más temprana de la semana hasta el cierre más tarde.
+// Así tiene el mismo alto todos los días y no "salta" al cambiar de día con las flechas.
+// Ojo: va por filas de 1 hora, así que redondeo: abre 09:30 -> fila de las 9 (floor); cierra 18:30 -> hasta las 19 (ceil).
 function horaInicioCalendario() {
-    return Math.floor(horaAMinutosFrontend(configuracion.horario.apertura) / 60);
+    const aperturas = todasLasFranjas().map(franja => horaAMinutosFrontend(franja.apertura));
+    return Math.floor(Math.min(...aperturas) / 60);
 }
 
 function horaFinCalendario() {
-    return Math.ceil(horaAMinutosFrontend(configuracion.horario.cierre) / 60);
+    const cierres = todasLasFranjas().map(franja => horaAMinutosFrontend(franja.cierre));
+    return Math.ceil(Math.max(...cierres) / 60);
+}
+
+// Tramos del calendario en que NO se atiende ese día, en minutos desde medianoche:
+// del principio del calendario a la primera apertura, los huecos entre franjas (mediodía)
+// y del último cierre al final. Un día cerrado no tiene franjas -> un solo tramo: el calendario entero.
+function tramosCerrados(fecha) {
+    const tramos = [];
+    let desde = horaInicioCalendario() * 60;
+
+    franjasDelDia(fecha).forEach(franja => {
+        const apertura = horaAMinutosFrontend(franja.apertura);
+        if (apertura > desde) {
+            tramos.push({ inicio: desde, fin: apertura });
+        }
+        desde = horaAMinutosFrontend(franja.cierre);
+    });
+
+    const finCalendario = horaFinCalendario() * 60;
+    if (desde < finCalendario) {
+        tramos.push({ inicio: desde, fin: finCalendario });
+    }
+
+    return tramos;
+}
+
+// Dibujo un bloque en el calendario, de inicioMin a finMin (minutos desde medianoche).
+// Lo usan los turnos ocupados y los tramos cerrados: cambia solo la clase.
+function dibujarBloque(inicioMin, finMin, clase) {
+    const minutosDesdeArriba = inicioMin - horaInicioCalendario() * 60;
+    const bloque = document.createElement('div');
+    bloque.className = clase;
+    bloque.style.top = `${(minutosDesdeArriba / 60) * ALTO_POR_HORA_PX}px`;
+    bloque.style.height = `${((finMin - inicioMin) / 60) * ALTO_POR_HORA_PX}px`;
+    turnosTrack.appendChild(bloque);
 }
 
 function dibujarFranjasHorarias() {
@@ -321,20 +393,26 @@ async function actualizarCalendarioVisual() {
 
     dibujarFranjasHorarias();
 
+    // Primero las horas que no se atiende (rayadas), después los turnos ocupados encima
+    tramosCerrados(fecha).forEach(tramo => {
+        dibujarBloque(tramo.inicio, tramo.fin, 'day-schedule__block day-schedule__block--cerrado');
+    });
+
+    // Día cerrado: lo aviso con un cartel y no consulto turnos (ese día no puede haber)
+    if (franjasDelDia(fecha).length === 0) {
+        const aviso = document.createElement('p');
+        aviso.className = 'day-schedule__cerrado-texto';
+        aviso.textContent = 'Cerrado';
+        turnosTrack.appendChild(aviso);
+        return;
+    }
+
     try {
         const respuesta = await fetch(`${API_URL}/turnos?fecha=${fecha}`);
         const turnosDelDia = await respuesta.json();
 
         turnosDelDia.forEach(turno => {
-            // Minutos desde la primera fila del calendario (de ahí sale la posición del bloque)
-            const inicioMin = horaAMinutosFrontend(turno.horaInicio) - horaInicioCalendario() * 60;
-            const finMin = horaAMinutosFrontend(turno.horaFin) - horaInicioCalendario() * 60;
-
-            const bloque = document.createElement('div');
-            bloque.className = 'day-schedule__block';
-            bloque.style.top = `${(inicioMin / 60) * ALTO_POR_HORA_PX}px`;
-            bloque.style.height = `${((finMin - inicioMin) / 60) * ALTO_POR_HORA_PX}px`;
-            turnosTrack.appendChild(bloque);
+            dibujarBloque(horaAMinutosFrontend(turno.horaInicio), horaAMinutosFrontend(turno.horaFin), 'day-schedule__block');
         });
 
     } catch (error) {
