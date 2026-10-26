@@ -114,3 +114,11 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* Nota chica debajo de los botones ("Podés cancelarlo online hasta 24 h antes del turno") */
+.cancelar-card__nota {
+    margin-top: var(--space-sm);
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+    text-align: center;
+}

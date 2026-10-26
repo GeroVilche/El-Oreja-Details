@@ -45,7 +45,14 @@ async function cargarTurno() {
             mostrarSaludo(turno.primerNombre);
         }
 
-        mostrarBotonCancelar(id);
+        // El backend ya calculó si se puede cancelar (con la hora del servidor, no la del celu
+        // del cliente, que puede estar mal). Acá solo muestro lo que corresponde.
+        if (turno.sePuedeCancelar) {
+            mostrarBotonCancelar(id);
+            mostrarNotaLimite(turno.horasLimiteCancelacion);
+        } else {
+            mostrarSinCancelacionOnline(turno);
+        }
 
     } catch (error) {
         console.error(error);
@@ -111,12 +118,57 @@ function mostrarConfirmacion(id) {
     btnNo.focus();
 }
 
+// Nota debajo de los botones: "Podés cancelarlo online hasta 24 h antes del turno".
+// Va afuera de #accionesTurno a propósito: esa parte se reemplaza al confirmar o volver atrás,
+// y la nota tiene que quedar siempre. Con límite 0 (testeando en mi compu) no la muestro.
+function mostrarNotaLimite(horasLimite) {
+    if (horasLimite <= 0) return;
+
+    const nota = document.createElement('p');
+    nota.className = 'cancelar-card__nota';
+    nota.textContent = `Podés cancelarlo online hasta ${horasLimite} h antes del turno.`;
+    document.getElementById('accionesTurno').after(nota);
+}
+
+// Cuando el backend dice que ya no se puede cancelar online:
+//  - si el turno ya pasó, no hay nada que avisar: ofrezco reservar otro.
+//  - si falta poco, ofrezco escribirle al negocio por WhatsApp con el mensaje ya armado.
+function mostrarSinCancelacionOnline(turno) {
+    const acciones = document.getElementById('accionesTurno');
+
+    if (turno.yaPaso) {
+        acciones.innerHTML = `
+            <p class="cancelar-card__pregunta">Este turno ya pasó.</p>
+            <div class="cancelar-card__botones">
+                <a href="${PAGINA_INICIO}#turnos" class="btn btn--primary btn--block">Reservar otro turno</a>
+            </div>
+        `;
+        return;
+    }
+
+    acciones.innerHTML = `
+        <p class="cancelar-card__pregunta" id="avisoLimite"></p>
+        <div class="cancelar-card__botones">
+            <a class="btn btn--primary btn--block" id="btnAvisarWhatsapp" target="_blank" rel="noopener">Avisar por WhatsApp</a>
+            <a href="${PAGINA_INICIO}" class="btn btn--ghost btn--block">Volver al inicio</a>
+        </div>
+    `;
+    // Los datos de la API van después, con textContent y .href (nunca dentro del innerHTML)
+    document.getElementById('avisoLimite').textContent =
+        `Faltan menos de ${turno.horasLimiteCancelacion} h para tu turno, así que ya no se puede cancelar online. `
+        + 'Escribinos por WhatsApp y lo resolvemos.';
+    document.getElementById('btnAvisarWhatsapp').href = turno.linkWhatsApp;
+}
+
 async function cancelarTurno(id) {
     try {
         const respuesta = await fetch(`${API_URL}/turnos/${id}`, { method: 'DELETE' });
 
         if (!respuesta.ok) {
-            mostrarEstadoFinal('No se pudo cancelar el turno.', 'error');
+            // Si el backend explica por qué (ej. el 403 del límite de horas), muestro su mensaje.
+            // .catch(() => ({})): si la respuesta no es JSON, sigo con un objeto vacío y uso el texto genérico.
+            const datos = await respuesta.json().catch(() => ({}));
+            mostrarEstadoFinal(datos.error || 'No se pudo cancelar el turno.', 'error');
             return;
         }
 
