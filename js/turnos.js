@@ -1,3 +1,7 @@
+// turnos.js es un módulo (ver el <script type="module"> en index.html): así puedo importar
+// la tarjeta del turno, que está en su propio archivo porque la comparte con cancelar.html
+import { mostrarTarjetaTurno } from './tarjeta-turno.js';
+
 const inputFecha = document.getElementById('fecha');
 const selectServicio = document.getElementById('servicio');
 const selectHora = document.getElementById('hora');
@@ -234,7 +238,7 @@ formulario.addEventListener('submit', async (evento) => {
         }
 
         actualizarCalendarioVisual();
-        mostrarReservaExitosa(datosTurno, datos);
+        abrirTarjetaDeReserva(datos);
 
     }   catch (error) {
         console.error(error);
@@ -246,15 +250,18 @@ formulario.addEventListener('submit', async (evento) => {
     }
 });
 
-// PANEL DE RESERVA EXITOSA
-// Antes se hacía formulario.innerHTML = ..., y eso DESTRUÍA el formulario (había que recargar
-// para reservar otro turno). Ahora el formulario solo se oculta y se muestra este panel aparte.
-const panelExito = document.getElementById('reservaExito');
-const tituloExito = document.getElementById('reservaExitoTitulo');
-const resumenReserva = document.getElementById('reservaResumen');
-const btnIrWhatsapp = document.getElementById('btnIrWhatsapp');
-const btnVerTurno = document.getElementById('btnVerTurno');
-const btnOtroTurno = document.getElementById('btnOtroTurno');
+// MODAL CON LA TARJETA DEL TURNO (después de reservar)
+// Antes había un panel que reemplazaba al formulario; ahora la tarjeta completa del turno
+// (la misma de cancelar.html) aparece en un <dialog> encima de la página.
+const modalTurno = document.getElementById('modalTurno');
+const tarjetaModal = document.getElementById('tarjetaTurnoModal');
+const avisoUltimoTurno = document.getElementById('avisoUltimoTurno');
+
+// El último turno reservado en esta visita y su link de WhatsApp, para poder reabrir la tarjeta
+// si cerraron el modal. ultimoTurno vale null si no hay (o si lo cancelaron). Se pierden al recargar
+// la página: está a propósito, para eso está el link del mensaje de WhatsApp.
+let ultimoTurno = null;
+let ultimoLinkWhatsApp = null;
 
 // "2026-10-10" -> "sábado 10 de octubre"
 function formatearFechaLarga(fecha) {
@@ -263,37 +270,68 @@ function formatearFechaLarga(fecha) {
         .replace(',', '');
 }
 
-function mostrarReservaExitosa(datosTurno, respuestaBackend) {
-    resumenReserva.textContent =
-        `${datosTurno.servicio}, el ${formatearFechaLarga(datosTurno.fecha)} a las ${datosTurno.horaInicio}.`;
-
-    btnIrWhatsapp.href = respuestaBackend.linkWhatsApp;
-    btnVerTurno.href = respuestaBackend.linkCancelacion;
-
-    formulario.hidden = true;
-    panelExito.hidden = false;
-
-    // En el celular el formulario es largo: llevamos la vista al panel y le damos el foco
-    // (así un lector de pantalla también anuncia "¡Turno reservado!")
-    panelExito.scrollIntoView({ block: 'nearest' });
-    tituloExito.focus({ preventScroll: true });
+function abrirTarjetaDeReserva(respuestaBackend) {
+    ultimoTurno = respuestaBackend.turno;
+    ultimoLinkWhatsApp = respuestaBackend.linkWhatsApp;
+    abrirModalTurno();
 }
 
-// "Reservar otro turno": vuelve el formulario. Mantenemos nombre, teléfono y fecha
-// (lo más probable es que sea la misma persona) y limpiamos el resto.
-btnOtroTurno.addEventListener('click', () => {
+// Dibujo la tarjeta (de cero, en su estado normal) con el último turno y abro el modal.
+// La uso al reservar y al reabrir con "Ver turno": así, si lo había reprogramado, aparece
+// con el horario nuevo y las opciones al día (y no trabada en el mensaje de "reprogramado").
+function abrirModalTurno() {
+    mostrarTarjetaTurno(tarjetaModal, ultimoTurno, {
+        modo: 'reserva',
+        linkWhatsApp: ultimoLinkWhatsApp,
+        // Si lo reprograma o lo cancela desde el modal, actualizo lo de atrás (calendario y horarios)
+        // y me guardo los datos nuevos para cuando lo reabra
+        alCambiar: (turnoActualizado, linkWhatsApp) => {
+            ultimoTurno = turnoActualizado; // null si lo canceló
+            if (linkWhatsApp) ultimoLinkWhatsApp = linkWhatsApp; // después de reprogramar, el aviso con el horario nuevo
+            actualizarCalendarioVisual();
+            actualizarHorariosDisponibles();
+        },
+        alTerminar: () => modalTurno.close(),
+    });
+
+    avisoUltimoTurno.hidden = true; // mientras el modal está abierto no hace falta el aviso
+    modalTurno.showModal();
+}
+
+// La X cierra el modal. Escape también lo cierra (eso lo hace <dialog> solo).
+document.getElementById('cerrarModalTurno').addEventListener('click', () => modalTurno.close());
+
+// "close" se dispara SIEMPRE que se cierra el modal (X, Escape, "Listo", "Reservar otro turno"):
+// acá dejo el formulario listo para otro turno y muestro el aviso para reabrir la tarjeta.
+// Mantengo nombre, teléfono y fecha (lo más probable es que sea la misma persona) y limpio el resto.
+modalTurno.addEventListener('close', () => {
     selectServicio.value = '';
     document.getElementById('vehiculo').value = '';
     document.getElementById('comentario').value = '';
     selectHora.innerHTML = '<option value="" selected disabled>Elegí fecha y servicio primero</option>';
-
-    panelExito.hidden = true;
-    formulario.hidden = false;
-
     actualizarCalendarioVisual();
-    formulario.scrollIntoView({ block: 'nearest' });
-    selectServicio.focus({ preventScroll: true });
+    mostrarAvisoUltimoTurno();
 });
+
+// "Reservaste el viernes 30 de octubre a las 15:00 · Ver turno"
+function mostrarAvisoUltimoTurno() {
+    if (!ultimoTurno) {
+        avisoUltimoTurno.hidden = true;
+        return;
+    }
+
+    // Texto con textContent (los datos vienen de la API) y el botón armado con createElement
+    avisoUltimoTurno.textContent =
+        `Reservaste el ${formatearFechaLarga(ultimoTurno.fecha)} a las ${ultimoTurno.horaInicio}.`;
+    const botonVer = document.createElement('button');
+    botonVer.type = 'button';
+    botonVer.textContent = 'Ver turno';
+    botonVer.addEventListener('click', abrirModalTurno);
+    avisoUltimoTurno.append(botonVer);
+    avisoUltimoTurno.hidden = false;
+    // Al cerrar, el foco vuelve al botón de reservar (abajo del form): llevo la vista al aviso para que se vea
+    avisoUltimoTurno.scrollIntoView({ block: 'nearest' });
+}
 
 // CALENDARIO VISUAL
 const ALTO_POR_HORA_PX = 36;       // 2.25rem = 36px (asumiendo 1rem = 16px)
@@ -456,10 +494,7 @@ document.addEventListener('visibilitychange', () => {
     aplicarLimiteDeFecha(); // por si la página quedó abierta de un día para otro
     actualizarCalendarioVisual();
 
-    // Los horarios del <select> solo importan si el formulario está a la vista
-    if (!formulario.hidden) {
-        actualizarHorariosDisponibles();
-    }
+    actualizarHorariosDisponibles();
 });
 
 // AL CARGAR LA PÁGINA: arrancamos en el primer día que se puede reservar.

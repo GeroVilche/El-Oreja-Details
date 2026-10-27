@@ -55,6 +55,7 @@
   <link rel="stylesheet" href="css/13-utilities.css" />
   <link rel="stylesheet" href="css/14-location.css" />
   <link rel="stylesheet" href="css/15-day-schedule.css">
+  <link rel="stylesheet" href="css/17-tarjeta-turno.css" />
 </head>
 <body>
 
@@ -328,6 +329,9 @@
           usuario; las que valen de verdad están en el backend.
         -->
         <form class="card booking-form" action="#" method="get">
+          <!-- Aviso para volver a abrir la tarjeta del último turno si cerraron el modal (lo arma js/turnos.js) -->
+          <p class="booking-aviso" id="avisoUltimoTurno" hidden></p>
+
           <div class="booking-form__row">
             <div class="field">
               <label for="nombre">Nombre y apellido</label>
@@ -395,17 +399,19 @@
           </button>
         </form>
 
-        <!-- Panel que reemplaza al formulario después de reservar (se muestra desde js/turnos.js) -->
-        <div class="card booking-exito" id="reservaExito" hidden>
-          <h3 class="booking-exito__titulo" id="reservaExitoTitulo" tabindex="-1">¡Turno reservado!</h3>
-          <p class="booking-exito__resumen" id="reservaResumen"></p>
-          <p>Último paso: enviá el mensaje por WhatsApp. Ahí también te queda guardado el link para ver o cancelar tu turno.</p>
-          <div class="booking-exito__acciones">
-            <a href="#" class="btn btn--primary btn--block" id="btnIrWhatsapp">Enviar por WhatsApp</a>
-            <a href="#" class="btn btn--ghost btn--block" id="btnVerTurno" target="_blank" rel="noopener">Ver o cancelar mi turno</a>
+        <!-- Modal con la tarjeta del turno, apenas se reserva (lo abre js/turnos.js con showModal()).
+             <dialog> resuelve solo varias cosas: oscurece y bloquea lo de atrás, cierra con Escape y
+             maneja el foco del teclado. Se cierra solo con la X o Escape (no tocando afuera, a propósito:
+             en el celu es fácil tocar afuera sin querer antes de mandar el WhatsApp).
+             La tarjeta de adentro la dibuja js/tarjeta-turno.js (la misma que cancelar.html). -->
+        <dialog class="modal-turno" id="modalTurno" aria-label="Tu turno">
+          <div class="card tarjeta-turno modal-turno__contenido">
+            <button type="button" class="modal-turno__cerrar" id="cerrarModalTurno" aria-label="Cerrar">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </button>
+            <div id="tarjetaTurnoModal"></div>
           </div>
-          <button type="button" class="booking-exito__otro" id="btnOtroTurno">Reservar otro turno</button>
-        </div>
+        </dialog>
 
       </div>
     </section>
@@ -498,7 +504,8 @@
 
     <script src="js/config.js"></script>
     <script src="js/menu.js"></script>
-    <script src="js/turnos.js"></script>
+    <!-- turnos.js es un módulo: importa la tarjeta compartida (js/tarjeta-turno.js) -->
+    <script type="module" src="js/turnos.js"></script>
 
 </body>
 </html>

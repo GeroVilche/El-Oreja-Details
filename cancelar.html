@@ -14,18 +14,22 @@
     <link rel="stylesheet" href="css/03-base.css" />
     <link rel="stylesheet" href="css/04-components.css" />
     <link rel="stylesheet" href="css/16-cancelar.css" />
+    <link rel="stylesheet" href="css/17-tarjeta-turno.css" />
 </head>
 <body>
     <main class="cancelar-page">
         <div class="container">
             <a class="cancelar-marca" href="index.html">El Oreja Details</a>
-            <div class="card cancelar-card" id="cancelarCard">
+            <div class="card cancelar-card tarjeta-turno" id="cancelarCard">
                 <p>Cargando datos del turno...</p>
             </div>
         </div>
     </main>
 
+    <!-- config.js es un script común (deja API_URL global); cancelar.js es un módulo porque importa
+         la tarjeta compartida (js/tarjeta-turno.js). Ojo: los módulos no andan abriendo el archivo
+         directo (file://), necesitan un servidor: Live Server en mi compu, GitHub Pages en producción. -->
     <script src="js/config.js"></script>
-    <script src="js/cancelar.js"></script>
+    <script type="module" src="js/cancelar.js"></script>
 </body>
 </html>

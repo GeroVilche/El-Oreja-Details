@@ -1,6 +1,8 @@
 /* ==========================================================================
    CANCELAR.CSS
-   Página standalone a la que apunta el link de cancelación de turno.
+   Página standalone a la que apunta el link del turno (cancelar.html).
+   Acá está solo el armado de la página; la tarjeta en sí está en 17-tarjeta-turno.css
+   (compartida con el modal de index.html).
    ========================================================================== */
 .cancelar-page {
     min-height: 100vh;
@@ -30,121 +32,4 @@
 
 .cancelar-marca:hover {
     color: var(--color-text);
-}
-
-/* Saludo: el azul se usa SOLO en el nombre, para que sea el único punto de color */
-.cancelar-card__titulo {
-    font-size: 1.6rem;
-    line-height: var(--lh-heading);
-}
-
-.cancelar-card__nombre {
-    color: var(--color-accent-hover);
-    overflow-wrap: anywhere; /* por si alguien pone un nombre larguísimo sin espacios */
-}
-
-.cancelar-card__subtitulo {
-    margin-top: 0.2rem;
-    color: var(--color-text-muted);
-}
-
-/* Datos del turno: el horario es lo que el usuario vino a verificar → lo más grande */
-.cancelar-card__turno {
-    margin: var(--space-md) 0;
-    padding: var(--space-md) 0;
-    border-block: 1px solid var(--color-border-soft);
-}
-
-.cancelar-card__dia {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.3rem;
-    color: var(--color-text-muted);
-}
-
-.cancelar-card__hora {
-    margin: 0.1rem 0 0.35rem;
-    font-family: var(--font-utility);
-    font-weight: 600;
-    font-size: 2rem;
-    line-height: 1.15;
-    letter-spacing: 0.02em;
-    color: var(--color-text);
-}
-
-.cancelar-card__servicio {
-    color: var(--color-text-muted);
-}
-
-.cancelar-card__estado {
-    font-weight: 600;
-    margin-bottom: var(--space-md);
-}
-
-.cancelar-card__aviso {
-    margin-top: calc(-1 * var(--space-sm));
-    margin-bottom: var(--space-md);
-    font-size: var(--fs-small);
-    color: var(--color-text-muted);
-}
-
-.cancelar-card__estado--exito {
-    color: var(--color-success);
-}
-
-.cancelar-card__estado--error {
-    color: var(--color-text-muted);
-}
-
-/* Confirmación antes de cancelar */
-.cancelar-card__pregunta {
-    margin-bottom: var(--space-sm);
-    color: var(--color-text-muted);
-}
-
-/* Botones apilados: .btn tiene white-space: nowrap, y dos botones lado a lado
-   en una tarjeta angosta desbordarían en el celular */
-.cancelar-card__botones {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-xs);
-}
-
-.cancelar-card__botones .btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* Nota chica debajo de los botones ("Podés cancelarlo online hasta 24 h antes del turno") */
-.cancelar-card__nota {
-    margin-top: var(--space-sm);
-    font-size: var(--fs-small);
-    color: var(--color-text-muted);
-    text-align: center;
-}
-
-/* Panel de reprogramar: los campos uno debajo del otro, con aire entre ellos */
-.cancelar-card__reprogramar {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-}
-
-/* El "hidden" del HTML pierde contra un display del CSS: lo fuerzo (mismo problema que en turnos) */
-.cancelar-card [hidden] {
-    display: none;
-}
-
-/* Error al reprogramar (ej. "Ese horario ya no está disponible"), con el mismo estilo que el formulario de reservas */
-.cancelar-card__error {
-    padding: 0.7rem 0.9rem;
-    border-left: 3px solid var(--color-error);
-    background-color: var(--color-error-soft);
-    color: var(--color-error);
-    font-size: var(--fs-small);
-}
-
-.cancelar-card__reprogramar .field select:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
 }
