@@ -122,3 +122,29 @@
     color: var(--color-text-muted);
     text-align: center;
 }
+
+/* Panel de reprogramar: los campos uno debajo del otro, con aire entre ellos */
+.cancelar-card__reprogramar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+/* El "hidden" del HTML pierde contra un display del CSS: lo fuerzo (mismo problema que en turnos) */
+.cancelar-card [hidden] {
+    display: none;
+}
+
+/* Error al reprogramar (ej. "Ese horario ya no está disponible"), con el mismo estilo que el formulario de reservas */
+.cancelar-card__error {
+    padding: 0.7rem 0.9rem;
+    border-left: 3px solid var(--color-error);
+    background-color: var(--color-error-soft);
+    color: var(--color-error);
+    font-size: var(--fs-small);
+}
+
+.cancelar-card__reprogramar .field select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
