@@ -36,6 +36,13 @@
   --color-accent-soft: rgba(61, 122, 140, 0.12);
   --color-accent-soft-strong: rgba(61, 122, 140, 0.22);
 
+  /* Brillos del hero (el barrido de luz animado y el resplandor de la esquina).
+     Antes estaban escritos en ámbar adentro de 06-hero.css (restos de la paleta vieja "taller
+     nocturno"); ahora salen del acento. Cuando llegue la marca de Santi, cambiarlos acá. */
+  --color-brillo-suave: rgba(79, 151, 171, 0.07);  /* bordes del barrido */
+  --color-brillo: rgba(111, 178, 196, 0.12);       /* centro del barrido */
+  --color-resplandor: rgba(61, 122, 140, 0.14);    /* resplandor de la esquina superior */
+
   /* Utilidad */
   --color-success: #4caf6d;
   --color-error: #e5806f;

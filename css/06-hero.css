@@ -24,6 +24,17 @@
   object-position: center;
 }
 
+/* Final del hero: la foto y el barrido de luz se desvanecen hacia abajo en vez de cortar en
+   línea recta contra la sección de Servicios.
+   mask-image usa un degradado como "máscara": donde es negro el elemento se ve, donde es
+   transparente desaparece. Así se desvanecen la foto Y la animación juntas, y lo que queda
+   abajo es el fondo del hero, que es del mismo color que Servicios (--color-bg): no se nota la unión. */
+.hero__bg,
+.hero__sheen {
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%); /* Safari todavía lo pide con prefijo */
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+}
+
 @media (max-width: 700px) {
   .hero__bg {
     object-position: center 30%;
@@ -35,9 +46,11 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  /* color-mix mezcla el color de fondo con transparente: es el mismo oscurecido de antes, pero
+     sale de --color-bg (antes estaba escrito a mano como rgba(18, 22, 28, ...)) y cambia con la paleta */
   background:
-    linear-gradient(90deg, var(--color-bg) 20%, rgba(18, 22, 28, 0.6) 55%, rgba(18, 22, 28, 0.15) 100%),
-    radial-gradient(ellipse at 15% 0%, rgba(232, 163, 61, 0.10), transparent 55%);
+    linear-gradient(90deg, var(--color-bg) 20%, color-mix(in srgb, var(--color-bg) 60%, transparent) 55%, color-mix(in srgb, var(--color-bg) 15%, transparent) 100%),
+    radial-gradient(ellipse at 15% 0%, var(--color-resplandor), transparent 55%);
 }
 
 /* Barrido de luz — elemento de firma del diseño */
@@ -49,9 +62,9 @@
   background: linear-gradient(
     115deg,
     transparent 40%,
-    rgba(232, 163, 61, 0.06) 48%,
-    rgba(242, 177, 88, 0.1) 50%,
-    rgba(232, 163, 61, 0.06) 52%,
+    var(--color-brillo-suave) 48%,
+    var(--color-brillo) 50%,
+    var(--color-brillo-suave) 52%,
     transparent 60%
   );
   background-size: 300% 300%;

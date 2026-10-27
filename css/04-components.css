@@ -132,6 +132,15 @@
   transition: border-color var(--transition-fast);
 }
 
+/* Mismo alto para todos los campos de una línea. Sin esto cada navegador les da el suyo:
+   el <select> quedaba más bajo (~50px) que los inputs de texto (54px) y el de fecha (56px, por el
+   ícono del calendario), y en las filas de a dos se notaba el desnivel.
+   Con box-sizing: border-box (del reset), este alto ya incluye el padding y el borde. */
+.field input,
+.field select {
+  height: 3.375rem; /* 54px */
+}
+
 .field select {
   white-space: nowrap;
   overflow: hidden;
