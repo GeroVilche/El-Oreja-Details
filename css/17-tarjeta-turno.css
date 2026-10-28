@@ -146,3 +146,13 @@
     color: var(--color-error);
     font-size: var(--fs-small);
 }
+
+/* Aviso cuando Santi cerró el día del turno: destacado (borde de acento), arriba de los botones */
+.tarjeta-turno__alerta {
+    margin-bottom: var(--space-sm);
+    padding: 0.7rem 0.9rem;
+    border-left: 3px solid var(--color-accent);
+    background-color: var(--color-accent-soft);
+    color: var(--color-text);
+    font-size: var(--fs-small);
+}

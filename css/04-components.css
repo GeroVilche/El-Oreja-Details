@@ -164,6 +164,24 @@
   border-color: var(--color-accent);
 }
 
+/* Campo con error (js/turnos.js le pone aria-invalid="true"): borde rojo.
+   Uso el atributo de accesibilidad como selector: así el estilo y lo que anuncia el lector de pantalla
+   nunca se desincronizan. Va después del :focus para que el borde siga rojo mientras lo corrige. */
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"] {
+  border-color: var(--color-error);
+}
+
+/* Mensaje de error debajo del campo */
+.field__error {
+  font-size: 0.8rem;
+  color: var(--color-error);
+}
+
+.field__error[hidden] {
+  display: none;
+}
+
 .field textarea {
   resize: vertical;
   min-height: 90px;
