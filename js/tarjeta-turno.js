@@ -126,6 +126,7 @@ export function mostrarTarjetaTurno(contenedor, turnoInicial, opciones = {}) {
     //  - si no, el límite de horas ("Podés reprogramarlo o cancelarlo online hasta 24 h antes").
     //    Con límite 0 (testeando en mi compu) no lo muestro.
     function notaLimite() {
+        if (turno.diaBloqueado) return ''; // ese caso ya lo explica el aviso de arriba
         if (turno.agotoReprogramaciones) {
             return '<p class="tarjeta-turno__nota">Ya reprogramaste este turno. Si necesitás otro horario, cancelalo y reservá uno nuevo.</p>';
         }
@@ -137,6 +138,7 @@ export function mostrarTarjetaTurno(contenedor, turnoInicial, opciones = {}) {
     // El backend ya calculó qué se puede hacer (con su hora, no la del celu del cliente):
     //  - sePuedeCancelar: solo depende del límite de horas
     //  - sePuedeReprogramar: límite de horas Y que no haya usado ya sus reprogramaciones
+    //  - si Santi bloqueó el día (diaBloqueado), el backend ya manda las dos en true (sin límites)
     function mostrarOpciones() {
         const acciones = buscar('.tarjeta-turno__acciones');
 
@@ -169,7 +171,12 @@ export function mostrarTarjetaTurno(contenedor, turnoInicial, opciones = {}) {
             const botonReprogramar = turno.sePuedeReprogramar
                 ? '<button type="button" class="btn btn--primary btn--block" data-accion="reprogramar">Reprogramar</button>'
                 : '';
+            // Si Santi cerró el día del turno, lo aviso arriba de los botones (y no aplican los límites)
+            const avisoDiaBloqueado = turno.diaBloqueado
+                ? '<p class="tarjeta-turno__alerta">El negocio no va a abrir ese día. Elegí otro horario o cancelá el turno, sin ningún cargo ni límite.</p>'
+                : '';
             acciones.innerHTML = `
+                ${avisoDiaBloqueado}
                 <div class="tarjeta-turno__botones">
                     ${botonReprogramar}
                     <button type="button" class="btn btn--ghost btn--block" data-accion="cancelar">Cancelar este turno</button>

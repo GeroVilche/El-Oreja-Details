@@ -328,7 +328,8 @@
           Ojo: las validaciones de acá (required, pattern) son solo una ayuda para el
           usuario; las que valen de verdad están en el backend.
         -->
-        <form class="card booking-form" action="#" method="get">
+        <!-- novalidate: apago los carteles nativos del navegador; los errores los muestra js/turnos.js debajo de cada campo -->
+        <form class="card booking-form" action="#" method="get" novalidate>
           <!-- Aviso para volver a abrir la tarjeta del último turno si cerraron el modal (lo arma js/turnos.js) -->
           <p class="booking-aviso" id="avisoUltimoTurno" hidden></p>
 
@@ -340,6 +341,7 @@
                 id="nombre" 
                 name="nombre" 
                 placeholder="Ej: Martin Gómez" 
+                autocomplete="name"
                 required />
             </div>
             <div class="field">
@@ -349,8 +351,7 @@
                 id="telefono"
                 name="telefono"
                 placeholder="Ej: 249 4123456"
-                pattern="[0-9 ]{6,15}"
-                title="Solo números (podés incluir espacios), entre 6 y 15 dígitos"
+                autocomplete="tel"
                 required
                 />
             </div>

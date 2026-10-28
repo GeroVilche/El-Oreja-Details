@@ -198,9 +198,128 @@ function ocultarErrorFormulario() {
 formulario.addEventListener('input', ocultarErrorFormulario);
 formulario.addEventListener('change', ocultarErrorFormulario);
 
+// VALIDACIÓN DE CADA CAMPO (con el estilo del sitio)
+// El form tiene "novalidate": apago el cartelito nativo del navegador (cada uno con su estilo y su texto)
+// y valido yo acá, mostrando el error debajo de cada campo.
+// Ojo: esto es solo para ayudar al usuario. La validación que vale de verdad sigue en el backend
+// (el formulario se puede saltear), con las MISMAS reglas: nombre 2–60, teléfono 6–15 dígitos, etc.
+// Cuándo aparecen los errores: recién al tocar "Confirmar" (no molesto mientras completa), y cada
+// error se va apenas el campo queda bien.
+
+// "249 412-3456" o "(249) 4123456" -> "2494123456". Lo uso para validar y para mandarlo al backend.
+function limpiarTelefono(texto) {
+    return texto.replace(/[\s\-().+]/g, '');
+}
+
+// Cada regla: el campo y una función que devuelve el mensaje de error, o '' si está bien.
+// Las fechas "AAAA-MM-DD" se pueden comparar como texto (ver aplicarLimiteDeFecha).
+const reglasDelFormulario = [
+    {
+        campo: document.getElementById('nombre'),
+        validar: (valor) => {
+            const nombre = valor.trim();
+            if (!nombre) return 'Escribí tu nombre.';
+            if (nombre.length < 2 || nombre.length > 60) return 'El nombre tiene que tener entre 2 y 60 letras.';
+            return '';
+        },
+    },
+    {
+        campo: document.getElementById('telefono'),
+        validar: (valor) => {
+            const telefono = limpiarTelefono(valor);
+            if (!telefono) return 'Escribí tu teléfono.';
+            if (!/^[0-9]{6,15}$/.test(telefono)) return 'Revisá el teléfono: solo números, entre 6 y 15 (podés usar espacios o guiones).';
+            return '';
+        },
+    },
+    {
+        campo: selectServicio,
+        validar: (valor) => (valor ? '' : 'Elegí un servicio.'),
+    },
+    {
+        campo: document.getElementById('vehiculo'),
+        validar: (valor) => (valor ? '' : 'Elegí el tipo de vehículo.'),
+    },
+    {
+        campo: inputFecha,
+        validar: (valor) => {
+            if (!valor) return 'Elegí una fecha.';
+            if ((inputFecha.min && valor < inputFecha.min) || (inputFecha.max && valor > inputFecha.max)) {
+                return 'Elegí una fecha dentro del rango que se puede reservar.';
+            }
+            return '';
+        },
+    },
+    {
+        campo: selectHora,
+        validar: (valor) => (valor ? '' : 'Elegí un horario.'),
+    },
+];
+
+// Muestro (o saco) el error debajo del campo. El <p> del error lo creo la primera vez que hace falta.
+// aria-invalid y aria-describedby: los lectores de pantalla anuncian que el campo tiene un error
+// y leen el mensaje. El CSS también usa aria-invalid para pintar el borde en rojo.
+function mostrarErrorDeCampo(campo, mensaje) {
+    const contenedor = campo.closest('.field');
+    let error = contenedor.querySelector('.field__error');
+
+    if (!error) {
+        error = document.createElement('p');
+        error.className = 'field__error';
+        error.id = `${campo.id}-error`;
+        contenedor.append(error);
+    }
+
+    error.textContent = mensaje;
+    error.hidden = !mensaje;
+
+    if (mensaje) {
+        campo.setAttribute('aria-invalid', 'true');
+        campo.setAttribute('aria-describedby', error.id);
+    } else {
+        campo.removeAttribute('aria-invalid');
+        campo.removeAttribute('aria-describedby');
+    }
+}
+
+function validarCampo(regla) {
+    const mensaje = regla.validar(regla.campo.value);
+    mostrarErrorDeCampo(regla.campo, mensaje);
+    return !mensaje;
+}
+
+// Valido todo junto (al enviar). Si algo está mal, llevo el foco al PRIMER campo con error.
+function validarFormulario() {
+    // map y no every: every frena en el primer error, y yo quiero marcar TODOS los campos con problema
+    const resultados = reglasDelFormulario.map(validarCampo);
+    const primerError = reglasDelFormulario.find((regla, i) => !resultados[i]);
+    if (primerError) {
+        primerError.campo.focus();
+        return false;
+    }
+    return true;
+}
+
+function limpiarErroresDelFormulario() {
+    reglasDelFormulario.forEach((regla) => mostrarErrorDeCampo(regla.campo, ''));
+}
+
+// Si un campo ya está marcado con error, lo vuelvo a validar mientras lo corrige:
+// el error desaparece apenas queda bien (los que no tienen error no se tocan hasta el próximo envío)
+reglasDelFormulario.forEach((regla) => {
+    const revalidar = () => {
+        if (regla.campo.getAttribute('aria-invalid') === 'true') validarCampo(regla);
+    };
+    regla.campo.addEventListener('input', revalidar);
+    regla.campo.addEventListener('change', revalidar);
+});
+
 formulario.addEventListener('submit', async (evento) => {
     evento.preventDefault();
     ocultarErrorFormulario();
+
+    // Primero mis validaciones: si algo está mal, ni llamo al backend
+    if (!validarFormulario()) return;
 
     // Desactivamos el botón mientras se reserva: un doble clic no puede mandar dos reservas
     botonReservar.disabled = true;
@@ -211,7 +330,7 @@ formulario.addEventListener('submit', async (evento) => {
         horaInicio: selectHora.value,
         servicio: selectServicio.value,
         clienteNombre: document.getElementById('nombre').value,
-        clienteTelefono: document.getElementById('telefono').value,
+        clienteTelefono: limpiarTelefono(document.getElementById('telefono').value),
         vehiculo: document.getElementById('vehiculo').value,
         comentario: document.getElementById('comentario').value,
     };
@@ -305,6 +424,7 @@ document.getElementById('cerrarModalTurno').addEventListener('click', () => moda
 // acá dejo el formulario listo para otro turno y muestro el aviso para reabrir la tarjeta.
 // Mantengo nombre, teléfono y fecha (lo más probable es que sea la misma persona) y limpio el resto.
 modalTurno.addEventListener('close', () => {
+    limpiarErroresDelFormulario();
     selectServicio.value = '';
     document.getElementById('vehiculo').value = '';
     document.getElementById('comentario').value = '';
